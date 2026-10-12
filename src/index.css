@@ -1,0 +1,267 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens — "Ruang Tumbuh"
+   Fresh & supportive. Dominan biru muda + hijau muda di atas netral sejuk.
+   Dimension colors are a separate categorical data-viz palette (documented).
+--------------------------------------------------------------------------- */
+
+:root {
+  --bg: #f5fafb;
+  --surface: #ffffff;
+  --surface-2: #e9f3f5;
+  --surface-3: #d8e9ed;
+  --border: #d9e7ea;
+  --border-strong: #bcd4d9;
+
+  --fg: #1e2f34;
+  --fg-muted: #55686e;
+  --fg-subtle: #7f9298;
+  --fg-on-accent: #ffffff;
+
+  --accent: #2b7bb0;
+  --accent-hover: #256a99;
+  --accent-strong: #1f5f87;
+  --accent-tint: #e0f1f9;
+  --accent-border: rgba(31, 95, 135, 0.35);
+
+  --success: #2f7a4f;
+  --success-tint: #e2f5e8;
+  --warning: #a8791f;
+  --warning-tint: #f7eeda;
+  --danger: #b25560;
+  --danger-tint: #f9e6e9;
+  --info: #2f7f8f;
+  --info-tint: #e0f2f4;
+
+  --shadow-sm: 0 1px 2px rgba(26, 61, 74, 0.06);
+  --shadow-md:
+    0 10px 24px -12px rgba(26, 61, 74, 0.2), 0 2px 6px -3px rgba(26, 61, 74, 0.08);
+  --shadow-lg: 0 24px 48px -20px rgba(26, 61, 74, 0.26);
+
+  --radius-card: 18px;
+  --radius-input: 12px;
+  --radius-pill: 999px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0e181c;
+  --surface: #15232a;
+  --surface-2: #1d2f38;
+  --surface-3: #263b45;
+  --border: #2a3f49;
+  --border-strong: #3a5563;
+
+  --fg: #e9f2f4;
+  --fg-muted: #a9bec4;
+  --fg-subtle: #7c9299;
+  --fg-on-accent: #0b2e40;
+
+  --accent: #8ed0ee;
+  --accent-hover: #a3dbf3;
+  --accent-strong: #a5dcf5;
+  --accent-tint: #12303e;
+  --accent-border: rgba(142, 208, 238, 0.4);
+
+  --success: #8fd6a6;
+  --success-tint: #153020;
+  --warning: #dcb168;
+  --warning-tint: #33291a;
+  --danger: #e8899a;
+  --danger-tint: #332226;
+  --info: #8fcbe0;
+  --info-tint: #14303a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 28px -14px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 28px 56px -24px rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
+}
+
+/* Dimension categorical palette (data-viz, not UI accent). Cool blue-green family. */
+:root {
+  --dim-1: #3d87c4;
+  --dim-2: #2f9a88;
+  --dim-3: #5d9c43;
+  --dim-4: #6a7cd0;
+  --dim-5: #26759b;
+  --dim-6: #3c8262;
+}
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-on-accent: var(--fg-on-accent);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-tint: var(--accent-tint);
+
+  --color-success: var(--success);
+  --color-success-tint: var(--success-tint);
+  --color-warning: var(--warning);
+  --color-warning-tint: var(--warning-tint);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
+  --color-info: var(--info);
+  --color-info-tint: var(--info-tint);
+
+  --radius-card: 18px;
+  --radius-input: 12px;
+
+  --shadow-card: var(--shadow-md);
+  --shadow-float: var(--shadow-lg);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.006em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--accent-tint);
+    color: var(--fg);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+    border: 3px solid var(--bg);
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Motion — motivated only, degrades under reduced-motion. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bloom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+.animate-rise {
+  animation: rise-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-bloom {
+  animation: bloom-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-soft-pulse {
+  animation: soft-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

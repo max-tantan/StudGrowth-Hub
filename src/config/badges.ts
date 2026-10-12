@@ -1,0 +1,101 @@
+import type { BadgeDef } from '../types'
+
+export const BADGES: BadgeDef[] = [
+  {
+    id: 'mulai-tumbuh',
+    name: 'Mulai Tumbuh',
+    description: 'Menulis jurnal pertamamu. Perjalanan besar dimulai dari sini.',
+    major: 'UMUM',
+    kind: 'konsistensi',
+  },
+  {
+    id: 'konsisten-7',
+    name: 'Konsisten 7 Hari',
+    description: 'Menulis jurnal tujuh hari berturut-turut tanpa putus.',
+    major: 'UMUM',
+    dimensionId: 'mandiri',
+    kind: 'konsistensi',
+  },
+  {
+    id: 'refleksi-mendalam',
+    name: 'Refleksi Mendalam',
+    description: 'Mengisi 20 jurnal dengan refleksi yang jujur dan dalam.',
+    major: 'UMUM',
+    dimensionId: 'bernalar-kritis',
+    kind: 'kualitas',
+  },
+  {
+    id: 'bintang-tim',
+    name: 'Bintang Kerja Tim',
+    description: 'Konsisten membantu teman dan berbagi beban kerja.',
+    major: 'UMUM',
+    dimensionId: 'gotong-royong',
+    kind: 'kualitas',
+  },
+  {
+    id: 'siap-kerja',
+    name: 'Siap Kerja',
+    description: 'Kesiapan kerja kamu tumbuh merata di semua aspek.',
+    major: 'UMUM',
+    kind: 'karier',
+  },
+  {
+    id: 'pejuang-pkl',
+    name: 'Pejuang PKL',
+    description: 'Menjalani PKL dengan refleksi rutin dan tetap tumbuh.',
+    major: 'UMUM',
+    kind: 'pkl',
+  },
+  {
+    id: 'pelayan-teladan',
+    name: 'Pelayan Teladan',
+    description: 'Konsisten melayani dengan ramah dan sigap.',
+    major: 'PERHOTELAN',
+    dimensionId: 'gotong-royong',
+    kind: 'jurusan',
+  },
+  {
+    id: 'tenang-tekanan',
+    name: 'Tenang Saat Tekanan',
+    description: 'Tetap tenang dan profesional saat situasi menantang.',
+    major: 'PERHOTELAN',
+    dimensionId: 'adaptasi',
+    kind: 'jurusan',
+  },
+  {
+    id: 'teliti-detail',
+    name: 'Teliti Sampai Detail',
+    description: 'Menangkap kekeliruan kecil yang orang lain lewatkan.',
+    major: 'AKUNTANSI',
+    dimensionId: 'bernalar-kritis',
+    kind: 'jurusan',
+  },
+  {
+    id: 'jujur-angka',
+    name: 'Jujur pada Angka',
+    description: 'Menjaga integritas data walau tidak ada yang mengawasi.',
+    major: 'AKUNTANSI',
+    dimensionId: 'etika-profesi',
+    kind: 'jurusan',
+  },
+  {
+    id: 'pantang-menyerah',
+    name: 'Pantang Menyerah Debug',
+    description: 'Terus mencoba sampai masalah teknis terpecahkan.',
+    major: 'PPLG',
+    dimensionId: 'adaptasi',
+    kind: 'jurusan',
+  },
+  {
+    id: 'rekan-satu-tim',
+    name: 'Rekan Satu Tim',
+    description: 'Jadi andalan tim lewat kolaborasi dan berbagi ilmu.',
+    major: 'PPLG',
+    dimensionId: 'komunikasi-tim',
+    kind: 'jurusan',
+  },
+]
+
+export const BADGE_MAP: Record<string, BadgeDef> = Object.fromEntries(
+  BADGES.map((b) => [b.id, b]),
+)
