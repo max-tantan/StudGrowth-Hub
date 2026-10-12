@@ -68,150 +68,156 @@ export function HomeScreen() {
         }
       />
 
-      <main className="flex flex-1 flex-col gap-5 px-4 pb-8 pt-4">
-        {/* Konteks jurusan */}
-        <Card className="overflow-hidden p-0">
-          <div className="flex items-start gap-3 p-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-tint text-accent-strong">
-              <Icon name={MAJOR_ICON[currentStudent.major]} size={24} weight="fill" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <p className="text-[15px] font-extrabold text-fg">
-                  {major.name}
+      <main className="flex flex-1 flex-col gap-5 px-4 pb-8 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
+        {/* Right column (mobile order: first items appear here) */}
+        <div className="flex flex-col gap-5 lg:col-start-8 lg:col-span-5 lg:row-start-1">
+          {/* Konteks jurusan */}
+          <Card className="overflow-hidden p-0">
+            <div className="flex items-start gap-3 p-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-tint text-accent-strong">
+                <Icon name={MAJOR_ICON[currentStudent.major]} size={24} weight="fill" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="text-[15px] font-extrabold text-fg">
+                    {major.name}
+                  </p>
+                  <Chip
+                    tone={
+                      currentStudent.pklStatus === 'sedang' ? 'info' : 'neutral'
+                    }
+                    icon="briefcase"
+                  >
+                    {PKL_LABEL[currentStudent.pklStatus]}
+                  </Chip>
+                </div>
+                <p className="text-xs text-fg-muted">{major.fullName}</p>
+                <p className="mt-0.5 text-[13px] text-fg-subtle text-pretty">
+                  {major.tagline}
                 </p>
-                <Chip
-                  tone={
-                    currentStudent.pklStatus === 'sedang' ? 'info' : 'neutral'
-                  }
-                  icon="briefcase"
-                >
-                  {PKL_LABEL[currentStudent.pklStatus]}
-                </Chip>
               </div>
-              <p className="text-xs text-fg-muted">{major.fullName}</p>
-              <p className="mt-0.5 text-[13px] text-fg-subtle text-pretty">
-                {major.tagline}
-              </p>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-1.5 border-t border-border bg-surface-2/50 px-4 py-2.5">
-            {major.values.slice(0, 4).map((v) => (
-              <Chip key={v} tone="accent">
-                {v}
-              </Chip>
-            ))}
-          </div>
-        </Card>
-
-        {/* Strip statistik */}
-        <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
-          <Stat icon="fire" value={String(streak)} label="Runtutan" />
-          <Stat icon="journal" value={String(journalCount)} label="Jurnal" />
-          <Stat icon="sparkle" value={String(pppAverage)} label="Karakter" />
-          <Stat icon="briefcase" value={String(wrAverage)} label="Siap kerja" />
-        </div>
-
-        {/* Prompt refleksi hari ini */}
-        <Card variant="accent" className="relative">
-          <div className="flex items-center gap-2 text-accent-strong">
-            <Icon name="quote" size={16} weight="fill" />
-            <span className="text-[11px] font-bold uppercase tracking-wide">
-              Refleksi hari ini
-            </span>
-          </div>
-          <p className="mt-2 text-[16px] font-semibold leading-snug text-fg text-pretty">
-            {prompt}
-          </p>
-          <div className="mt-3.5 flex gap-2">
-            <Link to="/jurnal/baru" state={{ prompt }} className="flex-1">
-              <Button block size="sm" icon="note">
-                Tulis jurnal
-              </Button>
-            </Link>
-            <Link to="/konsultasi" className="flex-1">
-              <Button block size="sm" variant="secondary" icon="consult">
-                Tanya asisten
-              </Button>
-            </Link>
-          </div>
-        </Card>
-
-        {/* Bunga tumbuh */}
-        <Card className="flex items-center gap-4">
-          <Link to="/perkembangan" className="shrink-0" aria-label="Lihat perkembangan">
-            <GrowthBloom petals={petals} size={104} />
-          </Link>
-          <div className="min-w-0 flex-1">
-            <h2 className="text-[15px] font-bold text-fg">Bunga Tumbuhmu</h2>
-            <p className="mt-1 text-[13px] text-fg-muted text-pretty">
-              Setiap kelopak mewakili satu dimensi karakter. Makin sering kamu
-              berefleksi, makin mekar.
-            </p>
-            <Link
-              to="/perkembangan"
-              className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-semibold text-accent-strong"
-            >
-              Lihat perkembangan
-              <Icon name="caretRight" size={13} weight="bold" />
-            </Link>
-          </div>
-        </Card>
-
-        {/* Aksi kecil */}
-        <Card className="flex items-start gap-3">
-          <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-success-tint text-success">
-            <Icon name="lightning" size={18} weight="fill" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
-              Aksi kecil hari ini
-            </p>
-            <p className="mt-0.5 text-sm font-medium text-fg text-pretty">
-              {action}
-            </p>
-          </div>
-        </Card>
-
-        {/* Target */}
-        <TargetSection
-          studentId={currentStudent.id}
-          targets={state.targets}
-          limit={3}
-        />
-
-        {/* Jurnal terbaru */}
-        <section>
-          <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold text-fg">Jurnal terbaru</h2>
-            <Link
-              to="/jurnal"
-              className="text-xs font-semibold text-accent-strong"
-            >
-              Lihat semua
-            </Link>
-          </div>
-          {recent.length === 0 ? (
-            <EmptyState
-              icon="journal"
-              title="Belum ada jurnal"
-              description="Tulis momen pertamamu hari ini. Tidak perlu panjang, yang jujur lebih berharga."
-              action={
-                <Link to="/jurnal/baru">
-                  <Button size="sm" icon="plus">
-                    Tulis jurnal pertama
-                  </Button>
-                </Link>
-              }
-            />
-          ) : (
-            <div className="flex flex-col gap-2.5">
-              {recent.map((entry) => (
-                <JournalCard key={entry.id} entry={entry} />
+            <div className="flex flex-wrap gap-1.5 border-t border-border bg-surface-2/50 px-4 py-2.5">
+              {major.values.slice(0, 4).map((v) => (
+                <Chip key={v} tone="accent">
+                  {v}
+                </Chip>
               ))}
             </div>
-          )}
-        </section>
+          </Card>
+
+          {/* Strip statistik */}
+          <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+            <Stat icon="fire" value={String(streak)} label="Runtutan" />
+            <Stat icon="journal" value={String(journalCount)} label="Jurnal" />
+            <Stat icon="sparkle" value={String(pppAverage)} label="Karakter" />
+            <Stat icon="briefcase" value={String(wrAverage)} label="Siap kerja" />
+          </div>
+
+          {/* Jurnal terbaru */}
+          <section>
+            <div className="mb-2.5 flex items-center justify-between">
+              <h2 className="text-[15px] font-bold text-fg">Jurnal terbaru</h2>
+              <Link
+                to="/jurnal"
+                className="text-xs font-semibold text-accent-strong"
+              >
+                Lihat semua
+              </Link>
+            </div>
+            {recent.length === 0 ? (
+              <EmptyState
+                icon="journal"
+                title="Belum ada jurnal"
+                description="Tulis momen pertamamu hari ini. Tidak perlu panjang, yang jujur lebih berharga."
+                action={
+                  <Link to="/jurnal/baru">
+                    <Button size="sm" icon="plus">
+                      Tulis jurnal pertama
+                    </Button>
+                  </Link>
+                }
+              />
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                {recent.map((entry) => (
+                  <JournalCard key={entry.id} entry={entry} />
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* Left column (mobile order continues here, but on lg appears first column) */}
+        <div className="flex flex-col gap-5 lg:col-start-1 lg:col-span-7 lg:row-start-1">
+          {/* Prompt refleksi hari ini */}
+          <Card variant="accent" className="relative">
+            <div className="flex items-center gap-2 text-accent-strong">
+              <Icon name="quote" size={16} weight="fill" />
+              <span className="text-[11px] font-bold uppercase tracking-wide">
+                Refleksi hari ini
+              </span>
+            </div>
+            <p className="mt-2 text-[16px] font-semibold leading-snug text-fg text-pretty">
+              {prompt}
+            </p>
+            <div className="mt-3.5 flex gap-2">
+              <Link to="/jurnal/baru" state={{ prompt }} className="flex-1">
+                <Button block size="sm" icon="note">
+                  Tulis jurnal
+                </Button>
+              </Link>
+              <Link to="/konsultasi" className="flex-1">
+                <Button block size="sm" variant="secondary" icon="consult">
+                  Tanya asisten
+                </Button>
+              </Link>
+            </div>
+          </Card>
+
+          {/* Bunga tumbuh */}
+          <Card className="flex items-center gap-4">
+            <Link to="/perkembangan" className="shrink-0" aria-label="Lihat perkembangan">
+              <GrowthBloom petals={petals} size={104} />
+            </Link>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[15px] font-bold text-fg">Bunga Tumbuhmu</h2>
+              <p className="mt-1 text-[13px] text-fg-muted text-pretty">
+                Setiap kelopak mewakili satu dimensi karakter. Makin sering kamu
+                berefleksi, makin mekar.
+              </p>
+              <Link
+                to="/perkembangan"
+                className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-semibold text-accent-strong"
+              >
+                Lihat perkembangan
+                <Icon name="caretRight" size={13} weight="bold" />
+              </Link>
+            </div>
+          </Card>
+
+          {/* Aksi kecil */}
+          <Card className="flex items-start gap-3">
+            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-success-tint text-success">
+              <Icon name="lightning" size={18} weight="fill" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
+                Aksi kecil hari ini
+              </p>
+              <p className="mt-0.5 text-sm font-medium text-fg text-pretty">
+                {action}
+              </p>
+            </div>
+          </Card>
+
+          {/* Target */}
+          <TargetSection
+            studentId={currentStudent.id}
+            targets={state.targets}
+            limit={3}
+          />
+        </div>
       </main>
     </>
   )

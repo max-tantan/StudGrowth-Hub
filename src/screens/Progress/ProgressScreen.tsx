@@ -31,8 +31,8 @@ export function ProgressScreen() {
     <>
       <TopBar title="Perkembangan" subtitle="Karakter & kesiapan kerja" />
 
-      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4">
-        <Card className="flex flex-col items-center gap-3 pb-5">
+      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
+        <Card className="flex flex-col items-center gap-3 pb-5 lg:col-span-5 lg:col-start-1 lg:row-start-1">
           <GrowthBloom petals={petals} size={224} />
           <div className="text-center">
             <p className="text-3xl font-extrabold text-fg">{average}</p>
@@ -46,7 +46,8 @@ export function ProgressScreen() {
           </p>
         </Card>
 
-        <SegmentedControl<Tab>
+        <div className="flex flex-col gap-5 lg:col-span-7 lg:col-start-6 lg:row-start-1">
+          <SegmentedControl<Tab>
           value={tab}
           onChange={setTab}
           options={[
@@ -76,7 +77,9 @@ export function ProgressScreen() {
 
         <InsightCard scores={scores} tab={tab} />
 
-        <section>
+      </div>
+
+      <section className="lg:col-span-12 lg:row-start-3">
           <h2 className="mb-2.5 text-[15px] font-bold text-fg">
             Lencana & pencapaian
           </h2>

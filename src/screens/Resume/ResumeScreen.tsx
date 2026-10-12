@@ -138,7 +138,7 @@ export function ResumeScreen() {
         }
       />
 
-      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4">
+      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
         <Card className="relative overflow-hidden">
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">

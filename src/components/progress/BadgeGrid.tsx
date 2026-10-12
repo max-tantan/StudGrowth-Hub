@@ -26,7 +26,7 @@ export function BadgeGrid({ major, awards }: BadgeGridProps) {
           {Math.round((earnedCount / relevant.length) * 100)}%
         </span>
       </div>
-      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
         {relevant.map((badge) => {
           const earned = earnedIds.has(badge.id)
           return (

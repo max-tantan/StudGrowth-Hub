@@ -69,7 +69,7 @@ export function JournalEditorScreen() {
         }
       />
 
-      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4">
+      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:mx-auto lg:w-full lg:max-w-[720px] lg:px-8 lg:pb-14 lg:pt-6">
         <Card variant="accent" className="flex items-start gap-2.5">
           <Icon
             name="quote"

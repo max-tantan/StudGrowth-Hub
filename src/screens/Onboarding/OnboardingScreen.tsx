@@ -76,7 +76,7 @@ export function OnboardingScreen() {
 
   return (
     <PhoneFrame>
-      <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col lg:mx-auto lg:w-full lg:max-w-[640px]">
         <header className="flex h-16 items-center gap-2 px-4 pt-[env(safe-area-inset-top)]">
           {step > 0 && current !== 5 ? (
             <IconButton

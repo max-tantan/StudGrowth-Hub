@@ -107,7 +107,9 @@ export function ChatThreadScreen() {
         }
       />
 
-      <main className="flex flex-1 flex-col gap-3.5 px-4 pb-4 pt-4">
+      <div className="flex min-w-0 flex-1 flex-col lg:mx-auto lg:w-full lg:max-w-[820px]">
+
+      <main className="flex flex-1 flex-col gap-3.5 px-4 pb-4 pt-4 lg:px-8 lg:pb-6">
         {session.escalated && (
           <div className="flex items-start gap-2.5 rounded-[var(--radius-card)] border border-warning/30 bg-warning-tint px-3.5 py-3">
             <Icon
@@ -175,6 +177,7 @@ export function ChatThreadScreen() {
       </main>
 
       <Composer onSend={send} disabled={typing} />
+      </div>
     </>
   )
 }

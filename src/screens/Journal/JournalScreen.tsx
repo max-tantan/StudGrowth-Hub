@@ -50,14 +50,14 @@ export function JournalScreen() {
         }
       />
 
-      <main className="flex flex-1 flex-col gap-4 px-4 pb-8 pt-4">
+      <main className="flex flex-1 flex-col gap-4 px-4 pb-8 pt-4 lg:px-8 lg:pb-14 lg:pt-6">
         <SearchInput
           value={query}
           onChange={setQuery}
           placeholder="Cari di jurnalmu…"
         />
 
-        <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+        <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 lg:flex-wrap lg:overflow-visible">
           <FilterChip active={!moodFilter} onClick={() => setMoodFilter(null)}>
             Semua
           </FilterChip>
@@ -98,7 +98,7 @@ export function JournalScreen() {
             />
           )
         ) : (
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 lg:grid lg:grid-cols-2 lg:gap-3 xl:grid-cols-3">
             {entries.map((entry) => (
               <JournalCard key={entry.id} entry={entry} />
             ))}

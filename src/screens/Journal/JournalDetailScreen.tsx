@@ -56,7 +56,7 @@ export function JournalDetailScreen() {
         }
       />
 
-      <main className="flex flex-1 flex-col gap-4 px-4 pb-10 pt-4">
+      <main className="flex flex-1 flex-col gap-4 px-4 pb-10 pt-4 lg:mx-auto lg:w-full lg:max-w-[720px] lg:px-8 lg:pb-14 lg:pt-6">
         <div className="flex items-center gap-3">
           <span
             className="flex h-11 w-11 items-center justify-center rounded-full"

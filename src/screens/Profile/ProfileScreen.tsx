@@ -39,7 +39,7 @@ export function ProfileScreen() {
     <>
       <TopBar title="Profil" showBack />
 
-      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4">
+      <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:mx-auto lg:w-full lg:max-w-[760px] lg:px-8 lg:pb-14 lg:pt-6">
         <Card className="flex flex-col items-center gap-3 pb-5 text-center">
           <Avatar name={currentStudent.name} initials={currentStudent.initials} size="lg" />
           <div>

@@ -6,6 +6,8 @@ import { AppShell } from './components/layout/AppShell'
 import { Icon } from './components/ui/Icon'
 import { OnboardingScreen } from './screens/Onboarding/OnboardingScreen'
 
+import { ConsultLayout } from './screens/Consult/ConsultLayout'
+
 const HomeScreen = lazy(() =>
   import('./screens/Home/HomeScreen').then((m) => ({ default: m.HomeScreen })),
 )
@@ -88,8 +90,10 @@ function AppRoutes() {
           <Route path="/jurnal" element={<JournalScreen />} />
           <Route path="/jurnal/baru" element={<JournalEditorScreen />} />
           <Route path="/jurnal/:id" element={<JournalDetailScreen />} />
-          <Route path="/konsultasi" element={<ConsultScreen />} />
-          <Route path="/konsultasi/:sessionId" element={<ChatThreadScreen />} />
+          <Route path="/konsultasi" element={<ConsultLayout />}>
+            <Route index element={<ConsultScreen />} />
+            <Route path=":sessionId" element={<ChatThreadScreen />} />
+          </Route>
           <Route path="/perkembangan" element={<ProgressScreen />} />
           <Route path="/resume" element={<ResumeScreen />} />
           <Route path="/pkl" element={<PklScreen />} />

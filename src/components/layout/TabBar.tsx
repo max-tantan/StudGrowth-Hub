@@ -1,24 +1,16 @@
 import { NavLink } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 import { Icon } from '../ui/Icon'
-import type { IconName } from '../ui/icons'
-
-const TABS: { to: string; label: string; icon: IconName }[] = [
-  { to: '/beranda', label: 'Beranda', icon: 'home' },
-  { to: '/jurnal', label: 'Jurnal', icon: 'journal' },
-  { to: '/konsultasi', label: 'Konsultasi', icon: 'consult' },
-  { to: '/perkembangan', label: 'Tumbuh', icon: 'progress' },
-  { to: '/resume', label: 'Resume', icon: 'resume' },
-]
+import { TAB_NAV } from './nav'
 
 export function TabBar() {
   return (
     <nav
       aria-label="Navigasi utama"
-      className="sticky bottom-0 z-30 border-t border-border bg-bg/90 pb-[max(0.35rem,env(safe-area-inset-bottom))] backdrop-blur-md"
+      className="sticky bottom-0 z-30 border-t border-border bg-bg/90 pb-[max(0.35rem,env(safe-area-inset-bottom))] backdrop-blur-md lg:hidden"
     >
       <ul className="flex items-stretch justify-around px-1.5 pt-1.5">
-        {TABS.map((tab) => (
+        {TAB_NAV.map((tab) => (
           <li key={tab.to} className="flex-1">
             <NavLink
               to={tab.to}
