@@ -1,7 +1,18 @@
 import type { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 import { IconButton } from '../ui/Button'
+import { Icon } from '../ui/Icon'
+
+const CRUMB_LABELS: Record<string, string> = {
+  '/beranda': 'Beranda',
+  '/jurnal': 'Jurnal',
+  '/konsultasi': 'Konsultasi',
+  '/perkembangan': 'Tumbuh',
+  '/resume': 'Resume',
+  '/pkl': 'PKL',
+  '/profil': 'Profil',
+}
 
 interface TopBarProps {
   title?: ReactNode
@@ -11,6 +22,7 @@ interface TopBarProps {
   onBack?: () => void
   right?: ReactNode
   className?: string
+  lgHideText?: boolean
 }
 
 export function TopBar({
@@ -21,6 +33,7 @@ export function TopBar({
   onBack,
   right,
   className,
+  lgHideText = false,
 }: TopBarProps) {
   const navigate = useNavigate()
   const handleBack = () => {
@@ -42,10 +55,36 @@ export function TopBar({
           label="Kembali"
           tone="ghost"
           onClick={handleBack}
-          className="-ml-2"
+          className="-ml-2 lg:hidden"
         />
       )}
-      <div className="min-w-0 flex-1">
+      {showBack && backTo && (
+        <nav
+          aria-label="Breadcrumb"
+          className="hidden min-w-0 flex-1 items-center gap-2 lg:flex"
+        >
+          <Link
+            to={backTo}
+            className="shrink-0 text-[13px] font-semibold text-fg-subtle transition-colors hover:text-fg"
+          >
+            {CRUMB_LABELS[backTo] ?? 'Kembali'}
+          </Link>
+          <Icon
+            name="caretRight"
+            size={12}
+            weight="bold"
+            className="shrink-0 text-fg-subtle"
+          />
+          {title && <h1 className="truncate text-lg font-bold text-fg">{title}</h1>}
+        </nav>
+      )}
+      <div
+        className={cn(
+          'min-w-0 flex-1',
+          showBack && backTo && 'lg:hidden',
+          lgHideText && 'lg:hidden',
+        )}
+      >
         {title && (
           <h1 className="truncate text-lg font-bold text-fg">{title}</h1>
         )}

@@ -8,7 +8,7 @@ import { useApp } from '../../store/AppContext'
 import { Avatar } from '../ui/Avatar'
 import { setThemePreference, isDarkNow } from '../../lib/theme'
 
-export function Sidebar() {
+export function Sidebar({ onOpenPalette }: { onOpenPalette?: () => void }) {
   const { currentStudent } = useApp()
   const [dark, setDark] = useState(isDarkNow)
 
@@ -29,6 +29,21 @@ export function Sidebar() {
           <p className="text-sm font-extrabold text-fg">Ruang Tumbuh</p>
           <p className="text-[11px] font-medium text-fg-subtle">StudGrowth Hub</p>
         </div>
+      </div>
+
+      {/* Cari */}
+      <div className="px-2.5 pt-2">
+        <button
+          type="button"
+          onClick={onOpenPalette}
+          className="flex w-full items-center gap-2.5 rounded-xl border border-border bg-surface-2 px-3 py-2 text-left text-sm text-fg-muted transition-colors hover:text-fg"
+        >
+          <Icon name="search" size={16} />
+          <span className="flex-1">Cari</span>
+          <kbd className="rounded border border-border-strong bg-surface px-1.5 py-0.5 font-mono text-[10px] font-bold text-fg-subtle">
+            ⌘K
+          </kbd>
+        </button>
       </div>
 
       {/* Main nav */}

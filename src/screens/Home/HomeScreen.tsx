@@ -55,6 +55,7 @@ export function HomeScreen() {
   return (
     <>
       <TopBar
+        lgHideText
         title={`${greeting()}, ${firstName}`}
         subtitle={formatDate(new Date().toISOString(), {
           weekday: 'long',
@@ -69,8 +70,58 @@ export function HomeScreen() {
       />
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-8 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
+        {/* Hero band (desktop only) */}
+        <section className="hidden lg:col-span-12 lg:col-start-1 lg:row-start-1 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:pt-2">
+          <div className="min-w-0 flex-1">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-border bg-accent-tint px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-accent-strong">
+              <Icon name="fire" size={13} weight="fill" />
+              Hari ke-{streak} berkebun
+            </span>
+            <h1 className="mt-4 text-[clamp(2rem,3.2vw,3.25rem)] font-extrabold leading-[1.04] tracking-tight text-fg">
+              {greeting()},
+              <br />
+              {firstName}
+            </h1>
+            <p className="mt-3 text-[15px] text-fg-muted">
+              {formatDate(new Date().toISOString(), {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </p>
+            <div className="mt-7 flex flex-wrap items-end gap-x-8 gap-y-3">
+              <HeroMetric label="Runtutan" value={streak} unit="hari" />
+              <HeroMetric label="Jurnal" value={journalCount} unit="entri" />
+              <HeroMetric label="Karakter" value={pppAverage} unit="/100" />
+              <HeroMetric label="Siap kerja" value={wrAverage} unit="/100" />
+            </div>
+          </div>
+
+          <div className="relative flex shrink-0 items-center justify-center" style={{ width: 300, height: 260 }}>
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background:
+                  'radial-gradient(circle at 50% 50%, var(--accent-tint), transparent 68%)',
+              }}
+            />
+            <Link to="/perkembangan" aria-label="Lihat perkembangan">
+              <GrowthBloom petals={petals} size={230} interactive />
+            </Link>
+            <div className="absolute right-0 top-3 rounded-2xl border border-border bg-surface px-3 py-2 shadow-[var(--shadow-md)]">
+              <p className="text-[10px] font-bold uppercase tracking-wide text-fg-subtle">Karakter</p>
+              <p className="font-mono text-lg font-semibold leading-none text-fg">{pppAverage}</p>
+            </div>
+            <div className="absolute bottom-3 left-0 rounded-2xl border border-border bg-surface px-3 py-2 shadow-[var(--shadow-md)]">
+              <p className="text-[10px] font-bold uppercase tracking-wide text-fg-subtle">Siap kerja</p>
+              <p className="font-mono text-lg font-semibold leading-none text-fg">{wrAverage}</p>
+            </div>
+          </div>
+        </section>
+
         {/* Right column (mobile order: first items appear here) */}
-        <div className="flex flex-col gap-5 lg:col-start-8 lg:col-span-5 lg:row-start-1">
+        <div className="flex flex-col gap-5 lg:col-start-8 lg:col-span-5 lg:row-start-2">
           {/* Konteks jurusan */}
           <Card className="overflow-hidden p-0">
             <div className="flex items-start gap-3 p-4">
@@ -107,7 +158,7 @@ export function HomeScreen() {
           </Card>
 
           {/* Strip statistik */}
-          <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+          <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface lg:hidden">
             <Stat icon="fire" value={String(streak)} label="Runtutan" />
             <Stat icon="journal" value={String(journalCount)} label="Jurnal" />
             <Stat icon="sparkle" value={String(pppAverage)} label="Karakter" />
@@ -149,7 +200,7 @@ export function HomeScreen() {
         </div>
 
         {/* Left column (mobile order continues here, but on lg appears first column) */}
-        <div className="flex flex-col gap-5 lg:col-start-1 lg:col-span-7 lg:row-start-1">
+        <div className="flex flex-col gap-5 lg:col-start-1 lg:col-span-7 lg:row-start-2">
           {/* Prompt refleksi hari ini */}
           <Card variant="accent" className="relative">
             <div className="flex items-center gap-2 text-accent-strong">
@@ -176,7 +227,7 @@ export function HomeScreen() {
           </Card>
 
           {/* Bunga tumbuh */}
-          <Card className="flex items-center gap-4">
+          <Card className="flex items-center gap-4 lg:hidden">
             <Link to="/perkembangan" className="shrink-0" aria-label="Lihat perkembangan">
               <GrowthBloom petals={petals} size={104} />
             </Link>
@@ -220,6 +271,28 @@ export function HomeScreen() {
         </div>
       </main>
     </>
+  )
+}
+
+function HeroMetric({
+  label,
+  value,
+  unit,
+}: {
+  label: string
+  value: number
+  unit: string
+}) {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="font-mono text-2xl font-semibold leading-none text-fg">
+        {value}
+        <span className="ml-1 text-[11px] font-medium text-fg-subtle">{unit}</span>
+      </span>
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-fg-subtle">
+        {label}
+      </span>
+    </div>
   )
 }
 

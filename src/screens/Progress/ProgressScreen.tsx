@@ -33,7 +33,7 @@ export function ProgressScreen() {
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
         <Card className="flex flex-col items-center gap-3 pb-5 lg:col-span-5 lg:col-start-1 lg:row-start-1">
-          <GrowthBloom petals={petals} size={224} />
+          <GrowthBloom petals={petals} size={224} interactive />
           <div className="text-center">
             <p className="text-3xl font-extrabold text-fg">{average}</p>
             <p className="text-sm text-fg-muted">

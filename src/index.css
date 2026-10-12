@@ -208,6 +208,56 @@
   .text-pretty {
     text-wrap: pretty;
   }
+
+  /* Desktop ambient "garden" atmosphere — only ≥1024px, mobile untouched. */
+  @media (min-width: 1024px) {
+    .ambient-bg {
+      background-image:
+        radial-gradient(
+          920px 560px at 6% -8%,
+          color-mix(in oklab, var(--accent) 16%, transparent),
+          transparent 60%
+        ),
+        radial-gradient(
+          760px 480px at 98% 4%,
+          color-mix(in oklab, var(--dim-3) 13%, transparent),
+          transparent 62%
+        ),
+        radial-gradient(
+          840px 580px at 50% 114%,
+          color-mix(in oklab, var(--dim-2) 12%, transparent),
+          transparent 66%
+        ),
+        radial-gradient(
+          color-mix(in oklab, var(--fg) 6%, transparent) 1px,
+          transparent 1.6px
+        );
+      background-size: auto, auto, auto, 22px 22px;
+      background-attachment: fixed;
+    }
+    .dark .ambient-bg {
+      background-image:
+        radial-gradient(
+          920px 560px at 6% -8%,
+          color-mix(in oklab, var(--accent) 11%, transparent),
+          transparent 60%
+        ),
+        radial-gradient(
+          760px 480px at 98% 4%,
+          color-mix(in oklab, var(--dim-3) 9%, transparent),
+          transparent 62%
+        ),
+        radial-gradient(
+          840px 580px at 50% 114%,
+          color-mix(in oklab, var(--dim-2) 8%, transparent),
+          transparent 66%
+        ),
+        radial-gradient(
+          color-mix(in oklab, var(--fg) 9%, transparent) 1px,
+          transparent 1.6px
+        );
+    }
+  }
 }
 
 /* Motion — motivated only, degrades under reduced-motion. */

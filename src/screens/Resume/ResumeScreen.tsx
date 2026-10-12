@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import type { MoodLevel, ResumeWeek } from '../../types'
 import { MAJORS } from '../../config/majors'
-import { MOOD_MAP, formatShort, relativeLabel, startOfWeek } from '../../lib/format'
+import { MOOD_MAP, formatShort, startOfWeek } from '../../lib/format'
 import { resumeHighlights } from '../../lib/scoring'
 import { cn } from '../../lib/cn'
 import { useApp } from '../../store/AppContext'
@@ -17,6 +16,8 @@ import { MOOD_ICON } from '../../components/ui/icons'
 import { Sheet } from '../../components/ui/Sheet'
 import { TextArea, TextField } from '../../components/ui/Field'
 import { MoodPicker } from '../../components/journal/MoodPicker'
+import { WeekTimeline } from '../../components/resume/WeekTimeline'
+import { WeekDetailBody } from '../../components/resume/WeekDetailBody'
 
 const WEEKS = 6
 
@@ -139,7 +140,7 @@ export function ResumeScreen() {
       />
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
-        <Card className="relative overflow-hidden">
+        <Card className="relative overflow-hidden lg:col-span-12 lg:col-start-1 lg:row-start-1">
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-lg font-extrabold text-fg">
@@ -189,13 +190,17 @@ export function ResumeScreen() {
           </div>
         </Card>
 
-        <section>
+        <section className="lg:col-span-12 lg:col-start-1 lg:row-start-2">
           <div className="mb-2.5 flex items-center justify-between">
             <h2 className="text-[15px] font-bold text-fg">Rekap mingguan</h2>
             <span className="text-xs text-fg-subtle">{WEEKS} minggu terakhir</span>
           </div>
 
-          <div className="flex flex-col gap-2.5">
+          <div className="hidden lg:block">
+            <WeekTimeline weeks={weeks} />
+          </div>
+
+          <div className="flex flex-col gap-2.5 lg:hidden">
             {weeks.map((week) => (
               <WeekCard
                 key={week.id}
@@ -209,7 +214,7 @@ export function ResumeScreen() {
           </div>
         </section>
 
-        <section>
+        <section className="lg:col-span-7 lg:col-start-1 lg:row-start-3">
           <div className="mb-2.5 flex items-center gap-2">
             <h2 className="flex-1 text-[15px] font-bold text-fg">
               Catatan PKL
@@ -241,7 +246,7 @@ export function ResumeScreen() {
           )}
         </section>
 
-        <Card variant="outline" className="flex items-start gap-2.5">
+        <Card variant="outline" className="flex items-start gap-2.5 lg:col-span-5 lg:col-start-6 lg:row-start-3">
           <Icon name="info" size={18} className="mt-0.5 shrink-0 text-info" />
           <p className="text-[12.5px] text-fg-muted text-pretty">
             Resume ini dirangkum otomatis dari jurnal dan targetmu. Ekspor PDF
@@ -330,79 +335,7 @@ function WeekCard({
 
       {open && (
         <div className="border-t border-border bg-surface-2/50 px-4 py-3.5">
-          {week.entries.length === 0 ? (
-            <p className="text-sm text-fg-muted">
-              Tidak ada catatan minggu ini.
-            </p>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
-                  Suasana hati
-                </p>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  {week.moodSummary.map((m) => (
-                    <span
-                      key={m.mood}
-                      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
-                      style={{
-                        color: MOOD_MAP[m.mood].color,
-                        backgroundColor: MOOD_MAP[m.mood].tint,
-                      }}
-                    >
-                      <Icon name={MOOD_ICON[m.mood]} size={13} weight="fill" />
-                      {MOOD_MAP[m.mood].label} · {m.count}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
-                  Jurnal
-                </p>
-                <ul className="mt-1.5 flex flex-col gap-1.5">
-                  {week.entries.map((e) => (
-                    <li key={e.id}>
-                      <Link
-                        to={`/jurnal/${e.id}`}
-                        className="flex items-center gap-2 text-sm font-medium text-fg hover:text-accent-strong"
-                      >
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                        <span className="min-w-0 flex-1 truncate">{e.title}</span>
-                        <span className="shrink-0 font-mono text-[10.5px] text-fg-subtle">
-                          {relativeLabel(e.date)}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {week.targetsTouched.length > 0 && (
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
-                    Target
-                  </p>
-                  <ul className="mt-1.5 flex flex-col gap-1.5">
-                    {week.targetsTouched.map((t) => (
-                      <li key={t.id} className="flex items-center gap-2 text-sm text-fg">
-                        <Icon
-                          name={t.status === 'selesai' ? 'checkCircle' : 'target'}
-                          size={15}
-                          weight="fill"
-                          className={
-                            t.status === 'selesai' ? 'text-success' : 'text-accent-strong'
-                          }
-                        />
-                        {t.title}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+          <WeekDetailBody week={week} />
         </div>
       )}
     </Card>
