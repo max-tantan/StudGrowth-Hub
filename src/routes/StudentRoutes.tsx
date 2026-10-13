@@ -57,6 +57,11 @@ const ProfileScreen = lazy(() =>
     default: m.ProfileScreen,
   })),
 )
+const SettingsScreen = lazy(() =>
+  import('../screens/student/Settings/SettingsScreen').then((m) => ({
+    default: m.SettingsScreen,
+  })),
+)
 
 export function StudentRoutes() {
   const { state } = useApp()
@@ -87,6 +92,7 @@ export function StudentRoutes() {
           <Route path="/perkembangan" element={<ProgressScreen />} />
           <Route path="/resume" element={<ResumeScreen />} />
           <Route path="/pkl" element={<PklScreen />} />
+          <Route path="/pengaturan" element={<SettingsScreen />} />
           <Route path="/profil" element={<ProfileScreen />} />
         </Route>
         <Route path="*" element={<Navigate to="/beranda" replace />} />

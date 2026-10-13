@@ -145,7 +145,7 @@
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.5;
     letter-spacing: -0.006em;
     -webkit-font-smoothing: antialiased;
@@ -314,4 +314,77 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility — text scale on <html> (rem-based, scales Tailwind text).
+--------------------------------------------------------------------------- */
+
+html.text-scale-besar {
+  font-size: 17.5px;
+}
+
+html.text-scale-sangat-besar {
+  font-size: 19px;
+}
+
+/* ---------------------------------------------------------------------------
+   Color-blind friendly modes — applied on <html> as .cb-*.
+   Override the categorical dimension palette (--dim-1..6) and semantic
+   status colors. Resets use color-mix on --surface so tints adapt to theme.
+--------------------------------------------------------------------------- */
+
+html.cb-deuteranopia,
+html.cb-protanopia {
+  --dim-1: #0072b2;
+  --dim-2: #e69f00;
+  --dim-3: #cc79a7;
+  --dim-4: #56b4e9;
+  --dim-5: #d55e00;
+  --dim-6: #009e73;
+
+  --success: #009e73;
+  --warning: #e69f00;
+  --danger: #d55e00;
+  --info: #0072b2;
+  --success-tint: color-mix(in oklab, var(--success) 16%, var(--surface));
+  --warning-tint: color-mix(in oklab, var(--warning) 19%, var(--surface));
+  --danger-tint: color-mix(in oklab, var(--danger) 17%, var(--surface));
+  --info-tint: color-mix(in oklab, var(--info) 15%, var(--surface));
+}
+
+html.cb-tritanopia {
+  --dim-1: #d1495b;
+  --dim-2: #2a9d8f;
+  --dim-3: #8e44ad;
+  --dim-4: #e76f51;
+  --dim-5: #457b9d;
+  --dim-6: #66a182;
+
+  --success: #2a9d8f;
+  --warning: #e76f51;
+  --danger: #b2163a;
+  --info: #457b9d;
+  --success-tint: color-mix(in oklab, var(--success) 16%, var(--surface));
+  --warning-tint: color-mix(in oklab, var(--warning) 18%, var(--surface));
+  --danger-tint: color-mix(in oklab, var(--danger) 16%, var(--surface));
+  --info-tint: color-mix(in oklab, var(--info) 16%, var(--surface));
+}
+
+html.cb-monokrom {
+  --dim-1: #1f2937;
+  --dim-2: #3f4a5a;
+  --dim-3: #5b6675;
+  --dim-4: #7c8b99;
+  --dim-5: #9fadb9;
+  --dim-6: #c2ccd6;
+
+  --success: #3f4a5a;
+  --warning: #6b7280;
+  --danger: #1f2937;
+  --info: #5b6675;
+  --success-tint: color-mix(in oklab, var(--success) 15%, var(--surface));
+  --warning-tint: color-mix(in oklab, var(--warning) 17%, var(--surface));
+  --danger-tint: color-mix(in oklab, var(--danger) 14%, var(--surface));
+  --info-tint: color-mix(in oklab, var(--info) 16%, var(--surface));
 }

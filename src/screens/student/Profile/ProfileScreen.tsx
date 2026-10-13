@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import type { ThemePreference } from '../../../lib/theme'
-import { getThemePreference, setThemePreference } from '../../../lib/theme'
 import { MAJORS, MAJOR_LIST } from '../../../config/majors'
 import { formatDate } from '../../../lib/format'
 import { useApp } from '../../../store/AppContext'
@@ -11,7 +9,6 @@ import { Button } from '../../../components/ui/Button'
 import { Card } from '../../../components/ui/Card'
 import { Chip } from '../../../components/ui/Chip'
 import { Icon } from '../../../components/ui/Icon'
-import { SegmentedControl } from '../../../components/ui/SegmentedControl'
 import { Sheet } from '../../../components/ui/Sheet'
 
 export function ProfileScreen() {
@@ -26,18 +23,12 @@ export function ProfileScreen() {
     badges,
   } = useApp()
   const major = MAJORS[currentStudent.major]
-  const [theme, setTheme] = useState<ThemePreference>(getThemePreference)
   const [switchOpen, setSwitchOpen] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
 
-  const chooseTheme = (pref: ThemePreference) => {
-    setTheme(pref)
-    setThemePreference(pref)
-  }
-
   return (
     <>
-      <TopBar title="Profil" showBack />
+      <TopBar title="Profil" showBack className="lg:hidden" />
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:mx-auto lg:w-full lg:max-w-[760px] lg:px-8 lg:pb-14 lg:pt-6">
         <Card className="flex flex-col items-center gap-3 pb-5 text-center">
@@ -87,19 +78,21 @@ export function ProfileScreen() {
         </section>
 
         <section>
-          <h2 className="mb-2.5 text-[15px] font-bold text-fg">Tampilan</h2>
-          <SegmentedControl<ThemePreference>
-            value={theme}
-            onChange={chooseTheme}
-            options={[
-              { value: 'system', label: 'Sistem', icon: 'monitor' },
-              { value: 'light', label: 'Terang', icon: 'sun' },
-              { value: 'dark', label: 'Gelap', icon: 'moon' },
-            ]}
-          />
-          <p className="mt-2 text-xs text-fg-subtle">
-            Mode gelap mengikuti preferensi perangkatmu jika memilih "Sistem".
-          </p>
+          <h2 className="mb-2.5 text-[15px] font-bold text-fg">Pengaturan</h2>
+          <Link to="/pengaturan">
+            <Card className="flex items-center gap-3 transition-all hover:border-border-strong active:scale-[0.995]">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-accent-strong">
+                <Icon name="gear" size={20} weight="fill" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-fg">Pengaturan aplikasi</p>
+                <p className="text-xs text-fg-muted">
+                  Tema, modus buta warna, skala teks & pemberitahuan
+                </p>
+              </div>
+              <Icon name="caretRight" size={16} weight="bold" className="text-fg-subtle" />
+            </Card>
+          </Link>
         </section>
 
         <section>

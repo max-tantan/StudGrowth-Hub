@@ -56,6 +56,7 @@ export function HomeScreen() {
     <>
       <TopBar
         lgHideText
+        className="lg:hidden"
         title={`${greeting()}, ${firstName}`}
         subtitle={formatDate(new Date().toISOString(), {
           weekday: 'long',

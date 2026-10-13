@@ -61,7 +61,12 @@ export function PklScreen() {
 
   return (
     <>
-      <TopBar title="PKL" subtitle="Praktik Kerja Lapangan" showBack />
+      <TopBar
+        title="PKL"
+        subtitle="Praktik Kerja Lapangan"
+        showBack
+        className="lg:hidden"
+      />
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:mx-auto lg:w-full lg:max-w-[880px] lg:px-8 lg:pb-14 lg:pt-6">
         <Card className="overflow-hidden p-0">

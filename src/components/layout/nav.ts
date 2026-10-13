@@ -16,5 +16,6 @@ export const TAB_NAV: NavItem[] = [
 
 export const SECONDARY_NAV: NavItem[] = [
   { to: '/pkl', label: 'PKL', icon: 'briefcase' },
+  { to: '/pengaturan', label: 'Pengaturan', icon: 'gear' },
   { to: '/profil', label: 'Profil', icon: 'users' },
 ]

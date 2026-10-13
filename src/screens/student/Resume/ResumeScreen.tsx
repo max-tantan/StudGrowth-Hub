@@ -132,6 +132,7 @@ export function ResumeScreen() {
       <TopBar
         title="Resume Digital"
         subtitle="Rekap mingguan untuk guru & pembimbing PKL"
+        className="lg:hidden"
         right={
           <Button size="sm" variant="secondary" icon="download" onClick={() => setPdfOpen(true)}>
             Ekspor
@@ -162,6 +163,15 @@ export function ResumeScreen() {
               <Chip tone="warning" icon="medal">
                 {badges.length} lencana
               </Chip>
+              <Button
+                className="mt-1 hidden lg:inline-flex"
+                size="sm"
+                variant="secondary"
+                icon="download"
+                onClick={() => setPdfOpen(true)}
+              >
+                Ekspor
+              </Button>
             </div>
           </div>
           <div className="mt-3 border-t border-border pt-3">
