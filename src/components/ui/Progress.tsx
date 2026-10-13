@@ -1,5 +1,8 @@
+import { motion } from 'motion/react'
 import { cn } from '../../lib/cn'
 import { clamp } from '../../lib/format'
+import { EASE_SETTLE } from '../motion/transitions'
+import { useMotionEnabled } from '../motion/useMotionEnabled'
 
 interface ProgressProps {
   value: number
@@ -24,6 +27,7 @@ export function Progress({
   label,
 }: ProgressProps) {
   const v = clamp(value)
+  const animate = useMotionEnabled()
   return (
     <div
       className={cn('w-full overflow-hidden rounded-full bg-surface-3', size === 'sm' ? 'h-1.5' : 'h-2', className)}
@@ -33,9 +37,11 @@ export function Progress({
       aria-valuemax={100}
       aria-label={label}
     >
-      <div
-        className={cn('h-full rounded-full transition-[width] duration-500 ease-out', TONES[tone])}
-        style={{ width: `${v}%` }}
+      <motion.div
+        className={cn('h-full rounded-full', TONES[tone])}
+        initial={animate ? { width: 0 } : false}
+        animate={{ width: `${v}%` }}
+        transition={{ duration: 0.6, ease: EASE_SETTLE }}
       />
     </div>
   )

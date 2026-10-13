@@ -114,18 +114,45 @@ langsung di komponen.
 
 ## 6. Motion
 
-Keyframes di `src/index.css`:
+Animasi memakai **Motion for React** (`motion`, impor dari `motion/react`),
+bukan framework baru. Prinsip: hanya untuk memotivasi perhatian/transisi,
+tidak dekoratif berlebihan, dan utamakan properti `transform`/`opacity`.
 
-| Kelas | Efek | Durasi/easing |
+### Preferensi gerak
+
+Disimpan di `SettingsState.motion` (`src/lib/settings.ts`) dan diatur di
+Pengaturan → Tampilan → **Animasi**:
+
+| Nilai | Label | Efek |
 | --- | --- | --- |
-| `.animate-rise` | Muncul naik + fade | 0.5s `cubic-bezier(0.16, 1, 0.3, 1)` |
-| `.animate-bloom` | Muncul membesar + fade | 0.6s `cubic-bezier(0.16, 1, 0.3, 1)` |
-| `.animate-soft-pulse` | Denyut lembut berulang | 2.4s ease-in-out |
+| `system` (default) | Sistem | Ikut preferensi OS (`reducedMotion="user"`) |
+| `reduce` | Reduksi | Paksa nonaktif (`reducedMotion="always"`) |
+| `full` | Penuh | Paksa aktif, menimpa OS (`reducedMotion="never"`) |
 
-Prinsip: animasi hanya untuk memotivasi perhatian/transisi, tidak dekoratif
-berlebihan. Transisi komponen memakai `cubic-bezier(0.32, 0.72, 0, 1)` (halus,
-"settling"). Semua animasi otomatis dinonaktifkan di bawah
-`prefers-reduced-motion: reduce`.
+`MotionProvider` (`src/components/motion/MotionProvider.tsx`) memetakan nilai
+ini ke `<MotionConfig reducedMotion>`. Untuk animasi CSS murni, `applySettings`
+menoggle kelas `html.motion-reduce` / `html.motion-full`; aturan di
+`src/index.css` memakai `html:not(.motion-full)` agar opsi "Penuh" bisa
+menimpa `prefers-reduced-motion`. Hook `useMotionEnabled()` menggabungkan
+setting + `useReducedMotion()` untuk animasi berbasis JS (mis. `CountUp`).
+
+### Primitif
+
+| Berkas | Kegunaan |
+| --- | --- |
+| `components/motion/Reveal.tsx` | Muncul (rise/fade/bloom) saat masuk viewport |
+| `components/motion/Stagger.tsx` | `Stagger` + `StaggerItem` untuk entrance berurutan |
+| `components/motion/PageTransition.tsx` | Transisi antar rute (`AnimatePresence`) |
+| `components/motion/CountUp.tsx` | Angka naik via `animate()` + `MotionValue` |
+| `components/motion/transitions.ts` | Token easing/durasi (`EASE_SETTLE`, `SPRING_SETTLE`) |
+| `components/motion/useMotionEnabled.ts` | Cek apakah gerak diizinkan |
+
+### Keyframes CSS
+
+Tetap dipakai untuk kasus non-JS: `.animate-rise`, `.animate-bloom`,
+`.animate-soft-pulse`, dan `.shimmer` (skeleton). Transisi komponen memakai
+`cubic-bezier(0.16, 1, 0.3, 1)` (halus, "settling"). Semua otomatis
+dinonaktifkan mengikuti kebijakan gerak di atas.
 
 ## 7. Responsif
 

@@ -13,7 +13,8 @@ Panduan singkat agar perubahan konsisten dengan basis kode yang ada.
 
 Migrasi/penambahan perpustakaan tidak memakai alat khusus — cukup `npm install`.
 Proyek memakai Tailwind v4 via plugin Vite (`@tailwindcss/vite`) tanpa
-`tailwind.config`; token ditaruh di `src/index.css`.
+`tailwind.config`; token ditaruh di `src/index.css`. Animasi memakai `motion`
+(impor dari `motion/react`) melalui primitif di `src/components/motion/`.
 
 ## 2. TypeScript
 

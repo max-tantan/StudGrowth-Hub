@@ -1,8 +1,10 @@
+import { motion } from 'motion/react'
 import type { BadgeAward, Major } from '../../types'
 import { BADGES } from '../../config/badges'
 import { cn } from '../../lib/cn'
 import { Icon } from '../ui/Icon'
 import { BADGE_ICON } from '../ui/icons'
+import { EASE_SETTLE } from '../motion/transitions'
 
 interface BadgeGridProps {
   major: Major
@@ -26,12 +28,29 @@ export function BadgeGrid({ major, awards }: BadgeGridProps) {
           {Math.round((earnedCount / relevant.length) * 100)}%
         </span>
       </div>
-      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+      <motion.ul
+        className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.04 } },
+        }}
+      >
         {relevant.map((badge) => {
           const earned = earnedIds.has(badge.id)
           return (
-            <li
+            <motion.li
               key={badge.id}
+              variants={{
+                hidden: { opacity: 0, y: 12 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.4, ease: EASE_SETTLE },
+                },
+              }}
               className={cn(
                 'flex flex-col items-center gap-2 rounded-[var(--radius-card)] border p-3 text-center transition-colors',
                 earned
@@ -69,10 +88,10 @@ export function BadgeGrid({ major, awards }: BadgeGridProps) {
                   <Icon name="lock" size={11} weight="bold" /> Terkunci
                 </span>
               )}
-            </li>
+            </motion.li>
           )
         })}
-      </ul>
+      </motion.ul>
     </div>
   )
 }

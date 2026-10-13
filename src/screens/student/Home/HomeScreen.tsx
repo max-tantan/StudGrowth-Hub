@@ -14,6 +14,8 @@ import { MAJOR_ICON } from '../../../components/ui/icons'
 import { GrowthBloom } from '../../../components/charts/GrowthBloom'
 import { JournalCard } from '../../../components/journal/JournalCard'
 import { TargetSection } from '../../../components/progress/TargetSection'
+import { CountUp } from '../../../components/motion/CountUp'
+import { Stagger, StaggerItem } from '../../../components/motion/Stagger'
 
 const PKL_LABEL: Record<string, string> = {
   belum: 'Belum PKL',
@@ -122,8 +124,9 @@ export function HomeScreen() {
         </section>
 
         {/* Right column (mobile order: first items appear here) */}
-        <div className="flex flex-col gap-5 lg:col-start-8 lg:col-span-5 lg:row-start-2">
+        <Stagger className="flex flex-col gap-5 lg:col-start-8 lg:col-span-5 lg:row-start-2">
           {/* Konteks jurusan */}
+          <StaggerItem>
           <Card className="overflow-hidden p-0">
             <div className="flex items-start gap-3 p-4">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-tint text-accent-strong">
@@ -157,119 +160,132 @@ export function HomeScreen() {
               ))}
             </div>
           </Card>
+          </StaggerItem>
 
           {/* Strip statistik */}
-          <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface lg:hidden">
-            <Stat icon="fire" value={String(streak)} label="Runtutan" />
-            <Stat icon="journal" value={String(journalCount)} label="Jurnal" />
-            <Stat icon="sparkle" value={String(pppAverage)} label="Karakter" />
-            <Stat icon="briefcase" value={String(wrAverage)} label="Siap kerja" />
-          </div>
+          <StaggerItem className="lg:hidden">
+            <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+              <Stat icon="fire" value={streak} label="Runtutan" />
+              <Stat icon="journal" value={journalCount} label="Jurnal" />
+              <Stat icon="sparkle" value={pppAverage} label="Karakter" />
+              <Stat icon="briefcase" value={wrAverage} label="Siap kerja" />
+            </div>
+          </StaggerItem>
 
           {/* Jurnal terbaru */}
-          <section>
-            <div className="mb-2.5 flex items-center justify-between">
-              <h2 className="text-[15px] font-bold text-fg">Jurnal terbaru</h2>
-              <Link
-                to="/jurnal"
-                className="text-xs font-semibold text-accent-strong"
-              >
-                Lihat semua
-              </Link>
-            </div>
-            {recent.length === 0 ? (
-              <EmptyState
-                icon="journal"
-                title="Belum ada jurnal"
-                description="Tulis momen pertamamu hari ini. Tidak perlu panjang, yang jujur lebih berharga."
-                action={
-                  <Link to="/jurnal/baru">
-                    <Button size="sm" icon="plus">
-                      Tulis jurnal pertama
-                    </Button>
-                  </Link>
-                }
-              />
-            ) : (
-              <div className="flex flex-col gap-2.5">
-                {recent.map((entry) => (
-                  <JournalCard key={entry.id} entry={entry} />
-                ))}
+          <StaggerItem>
+            <section>
+              <div className="mb-2.5 flex items-center justify-between">
+                <h2 className="text-[15px] font-bold text-fg">Jurnal terbaru</h2>
+                <Link
+                  to="/jurnal"
+                  className="text-xs font-semibold text-accent-strong"
+                >
+                  Lihat semua
+                </Link>
               </div>
-            )}
-          </section>
-        </div>
+              {recent.length === 0 ? (
+                <EmptyState
+                  icon="journal"
+                  title="Belum ada jurnal"
+                  description="Tulis momen pertamamu hari ini. Tidak perlu panjang, yang jujur lebih berharga."
+                  action={
+                    <Link to="/jurnal/baru">
+                      <Button size="sm" icon="plus">
+                        Tulis jurnal pertama
+                      </Button>
+                    </Link>
+                  }
+                />
+              ) : (
+                <div className="flex flex-col gap-2.5">
+                  {recent.map((entry) => (
+                    <JournalCard key={entry.id} entry={entry} />
+                  ))}
+                </div>
+              )}
+            </section>
+          </StaggerItem>
+        </Stagger>
 
         {/* Left column (mobile order continues here, but on lg appears first column) */}
-        <div className="flex flex-col gap-5 lg:col-start-1 lg:col-span-7 lg:row-start-2">
+        <Stagger className="flex flex-col gap-5 lg:col-start-1 lg:col-span-7 lg:row-start-2">
           {/* Prompt refleksi hari ini */}
-          <Card variant="accent" className="relative">
-            <div className="flex items-center gap-2 text-accent-strong">
-              <Icon name="quote" size={16} weight="fill" />
-              <span className="text-[11px] font-bold uppercase tracking-wide">
-                Refleksi hari ini
-              </span>
-            </div>
-            <p className="mt-2 text-[16px] font-semibold leading-snug text-fg text-pretty">
-              {prompt}
-            </p>
-            <div className="mt-3.5 flex gap-2">
-              <Link to="/jurnal/baru" state={{ prompt }} className="flex-1">
-                <Button block size="sm" icon="note">
-                  Tulis jurnal
-                </Button>
-              </Link>
-              <Link to="/konsultasi" className="flex-1">
-                <Button block size="sm" variant="secondary" icon="consult">
-                  Tanya asisten
-                </Button>
-              </Link>
-            </div>
-          </Card>
+          <StaggerItem>
+            <Card variant="accent" className="relative">
+              <div className="flex items-center gap-2 text-accent-strong">
+                <Icon name="quote" size={16} weight="fill" />
+                <span className="text-[11px] font-bold uppercase tracking-wide">
+                  Refleksi hari ini
+                </span>
+              </div>
+              <p className="mt-2 text-[16px] font-semibold leading-snug text-fg text-pretty">
+                {prompt}
+              </p>
+              <div className="mt-3.5 flex gap-2">
+                <Link to="/jurnal/baru" state={{ prompt }} className="flex-1">
+                  <Button block size="sm" icon="note">
+                    Tulis jurnal
+                  </Button>
+                </Link>
+                <Link to="/konsultasi" className="flex-1">
+                  <Button block size="sm" variant="secondary" icon="consult">
+                    Tanya asisten
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+          </StaggerItem>
 
           {/* Bunga tumbuh */}
-          <Card className="flex items-center gap-4 lg:hidden">
-            <Link to="/perkembangan" className="shrink-0" aria-label="Lihat perkembangan">
-              <GrowthBloom petals={petals} size={104} />
-            </Link>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[15px] font-bold text-fg">Bunga Tumbuhmu</h2>
-              <p className="mt-1 text-[13px] text-fg-muted text-pretty">
-                Setiap kelopak mewakili satu dimensi karakter. Makin sering kamu
-                berefleksi, makin mekar.
-              </p>
-              <Link
-                to="/perkembangan"
-                className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-semibold text-accent-strong"
-              >
-                Lihat perkembangan
-                <Icon name="caretRight" size={13} weight="bold" />
+          <StaggerItem>
+            <Card className="flex items-center gap-4 lg:hidden">
+              <Link to="/perkembangan" className="shrink-0" aria-label="Lihat perkembangan">
+                <GrowthBloom petals={petals} size={104} />
               </Link>
-            </div>
-          </Card>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-[15px] font-bold text-fg">Bunga Tumbuhmu</h2>
+                <p className="mt-1 text-[13px] text-fg-muted text-pretty">
+                  Setiap kelopak mewakili satu dimensi karakter. Makin sering kamu
+                  berefleksi, makin mekar.
+                </p>
+                <Link
+                  to="/perkembangan"
+                  className="mt-2.5 inline-flex items-center gap-1 text-[13px] font-semibold text-accent-strong"
+                >
+                  Lihat perkembangan
+                  <Icon name="caretRight" size={13} weight="bold" />
+                </Link>
+              </div>
+            </Card>
+          </StaggerItem>
 
           {/* Aksi kecil */}
-          <Card className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-success-tint text-success">
-              <Icon name="lightning" size={18} weight="fill" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
-                Aksi kecil hari ini
-              </p>
-              <p className="mt-0.5 text-sm font-medium text-fg text-pretty">
-                {action}
-              </p>
-            </div>
-          </Card>
+          <StaggerItem>
+            <Card className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-success-tint text-success">
+                <Icon name="lightning" size={18} weight="fill" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold uppercase tracking-wide text-fg-subtle">
+                  Aksi kecil hari ini
+                </p>
+                <p className="mt-0.5 text-sm font-medium text-fg text-pretty">
+                  {action}
+                </p>
+              </div>
+            </Card>
+          </StaggerItem>
 
           {/* Target */}
-          <TargetSection
-            studentId={currentStudent.id}
-            targets={state.targets}
-            limit={3}
-          />
-        </div>
+          <StaggerItem>
+            <TargetSection
+              studentId={currentStudent.id}
+              targets={state.targets}
+              limit={3}
+            />
+          </StaggerItem>
+        </Stagger>
       </main>
     </>
   )
@@ -287,7 +303,7 @@ function HeroMetric({
   return (
     <div className="flex flex-col gap-0.5">
       <span className="font-mono text-2xl font-semibold leading-none text-fg">
-        {value}
+        <CountUp value={value} />
         <span className="ml-1 text-[11px] font-medium text-fg-subtle">{unit}</span>
       </span>
       <span className="text-[11px] font-semibold uppercase tracking-wide text-fg-subtle">
@@ -303,15 +319,16 @@ function Stat({
   label,
 }: {
   icon: 'fire' | 'journal' | 'sparkle' | 'briefcase'
-  value: string
+  value: number
   label: string
 }) {
   return (
     <div className={cn('flex flex-col items-center gap-1 px-1 py-3')}>
       <Icon name={icon} size={18} weight="duotone" className="text-accent-strong" />
-      <span className="font-mono text-lg font-semibold leading-none text-fg">
-        {value}
-      </span>
+      <CountUp
+        value={value}
+        className="font-mono text-lg font-semibold leading-none text-fg"
+      />
       <span className="text-[10px] font-semibold text-fg-subtle">{label}</span>
     </div>
   )

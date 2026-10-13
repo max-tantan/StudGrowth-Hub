@@ -9,6 +9,7 @@ import { EmptyState } from '../../../components/ui/EmptyState'
 import { Icon } from '../../../components/ui/Icon'
 import { SearchInput } from '../../../components/ui/SearchInput'
 import { JournalCard } from '../../../components/journal/JournalCard'
+import { Stagger, StaggerItem } from '../../../components/motion/Stagger'
 import { MOOD_ICON } from '../../../components/ui/icons'
 import type { MoodLevel } from '../../../types'
 
@@ -93,11 +94,13 @@ export function JournalList() {
           />
         )
       ) : (
-        <div className="flex flex-col gap-2.5">
+        <Stagger className="flex flex-col gap-2.5" gap={0.05}>
           {entries.map((entry) => (
-            <JournalCard key={entry.id} entry={entry} />
+            <StaggerItem key={entry.id}>
+              <JournalCard entry={entry} />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       )}
     </>
   )

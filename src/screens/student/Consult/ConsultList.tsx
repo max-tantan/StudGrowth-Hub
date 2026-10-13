@@ -8,6 +8,7 @@ import { Card } from '../../../components/ui/Card'
 import { Chip } from '../../../components/ui/Chip'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { Icon } from '../../../components/ui/Icon'
+import { Stagger, StaggerItem } from '../../../components/motion/Stagger'
 import { MODE_ICON } from '../../../components/ui/icons'
 
 const MODES: ChatMode[] = ['REFLEKSI', 'BELAJAR', 'SOSIAL', 'KARIER', 'PKL']
@@ -73,15 +74,15 @@ export function ConsultList() {
             description="Pilih salah satu topik di atas."
           />
         ) : (
-          <div className="flex flex-col gap-1.5">
+          <Stagger className="flex flex-col gap-1.5" gap={0.05}>
             {sessions.map((s) => {
               const last = s.messages.at(-1)
               return (
+                <StaggerItem key={s.id}>
                 <button
-                  key={s.id}
                   type="button"
                   onClick={() => navigate(`/konsultasi/${s.id}`)}
-                  className="text-left"
+                  className="w-full text-left"
                 >
                   <Card className="flex items-start gap-2.5 px-3 py-2.5 transition-all active:scale-[0.995]">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-2 text-accent-strong">
@@ -109,9 +110,10 @@ export function ConsultList() {
                     </div>
                   </Card>
                 </button>
+                </StaggerItem>
               )
             })}
-          </div>
+          </Stagger>
         )}
       </section>
     </>

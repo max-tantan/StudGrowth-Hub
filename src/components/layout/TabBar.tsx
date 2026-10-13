@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { motion } from 'motion/react'
 import { cn } from '../../lib/cn'
 import { Icon } from '../ui/Icon'
 import { TAB_NAV } from './nav'
@@ -23,11 +24,26 @@ export function TabBar() {
             >
               {({ isActive }) => (
                 <>
-                  <Icon
-                    name={tab.icon}
-                    size={23}
-                    weight={isActive ? 'fill' : 'regular'}
-                  />
+                  <span className="relative flex h-7 w-full max-w-[56px] items-center justify-center">
+                    {isActive && (
+                      <motion.span
+                        layoutId="tab-active-indicator"
+                        className="absolute inset-0 rounded-2xl bg-accent-tint"
+                        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                      />
+                    )}
+                    <motion.span
+                      className="relative flex"
+                      animate={{ scale: isActive ? 1.08 : 1, y: isActive ? -1 : 0 }}
+                      transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+                    >
+                      <Icon
+                        name={tab.icon}
+                        size={23}
+                        weight={isActive ? 'fill' : 'regular'}
+                      />
+                    </motion.span>
+                  </span>
                   {tab.label}
                 </>
               )}

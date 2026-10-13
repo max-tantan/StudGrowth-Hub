@@ -295,6 +295,15 @@
   }
 }
 
+@keyframes shimmer {
+  from {
+    background-position: -160% 0;
+  }
+  to {
+    background-position: 260% 0;
+  }
+}
+
 .animate-rise {
   animation: rise-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -305,15 +314,42 @@
   animation: soft-pulse 2.4s ease-in-out infinite;
 }
 
+/* Skeleton shimmer — paused in reduced motion by the rules further below. */
+.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--fg) 7%, transparent) 45%,
+    color-mix(in oklab, var(--fg) 7%, transparent) 55%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* Motion policy:
+   - `html.motion-full` (user forces full) wins over the OS setting.
+   - `html.motion-reduce` (user forces reduce) always disables.
+   - Otherwise the OS preference is respected. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html:not(.motion-full) *,
+  html:not(.motion-full) *::before,
+  html:not(.motion-full) *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+html.motion-reduce *,
+html.motion-reduce *::before,
+html.motion-reduce *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
 }
 
 /* ---------------------------------------------------------------------------

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useOutlet } from 'react-router-dom'
 import { PhoneFrame } from './PhoneFrame'
 import { Sidebar } from './Sidebar'
 import { TabBar } from './TabBar'
 import { StatusBar } from './StatusBar'
 import { CommandPalette } from './CommandPalette'
+import { PageTransition } from '../motion/PageTransition'
 
 const TAB_ROOTS = new Set([
   '/beranda',
@@ -27,6 +28,7 @@ function isEditing(e: EventTarget | null) {
 export function AppShell() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const outlet = useOutlet()
   const showTabs = TAB_ROOTS.has(pathname)
   const [paletteOpen, setPaletteOpen] = useState(false)
 
@@ -71,7 +73,7 @@ export function AppShell() {
         <Sidebar onOpenPalette={openPalette} />
         <div className="flex min-w-0 flex-1 flex-col lg:h-dvh">
           <div className="flex min-w-0 flex-1 flex-col lg:overflow-y-auto">
-            <Outlet />
+            <PageTransition routeKey={pathname}>{outlet}</PageTransition>
           </div>
           <StatusBar />
         </div>

@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
-import { Splash } from '../components/layout/Splash'
+import { ScreenSkeleton } from '../components/layout/ScreenSkeleton'
 import { useApp } from '../store/AppContext'
 import { OnboardingScreen } from '../screens/student/Onboarding/OnboardingScreen'
 import { ConsultLayout } from '../screens/student/Consult/ConsultLayout'
@@ -76,7 +76,7 @@ export function StudentRoutes() {
   }
 
   return (
-    <Suspense fallback={<Splash />}>
+    <Suspense fallback={<ScreenSkeleton />}>
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/beranda" element={<HomeScreen />} />

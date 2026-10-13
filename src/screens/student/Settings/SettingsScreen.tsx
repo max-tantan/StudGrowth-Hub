@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { ThemePreference } from '../../../lib/theme'
 import { getThemePreference, setThemePreference } from '../../../lib/theme'
-import { useSettings, type TextScale } from '../../../lib/settings'
+import { useSettings, type TextScale, type MotionPreference } from '../../../lib/settings'
 import {
   COLOR_BLIND_OPTIONS,
   type ColorBlindMode,
@@ -23,6 +23,12 @@ const TEXT_SCALE_OPTIONS: { value: TextScale; label: string }[] = [
   { value: 'normal', label: 'Normal' },
   { value: 'besar', label: 'Besar' },
   { value: 'sangat-besar', label: 'Ekstra' },
+]
+
+const MOTION_OPTIONS: { value: MotionPreference; label: string; icon: IconName }[] = [
+  { value: 'system', label: 'Sistem', icon: 'monitor' },
+  { value: 'reduce', label: 'Reduksi', icon: 'minus' },
+  { value: 'full', label: 'Penuh', icon: 'sparkle' },
 ]
 
 export function SettingsScreen() {
@@ -89,6 +95,19 @@ export function SettingsScreen() {
                 value={settings.textScale}
                 onChange={(textScale) => update({ textScale })}
                 options={TEXT_SCALE_OPTIONS}
+              />
+            </SettingItem>
+
+            <Divider />
+
+            <SettingItem
+              label="Animasi"
+              description="Pilih “Sistem” agar mengikuti pengaturan perangkat, “Reduksi” untuk meminimalkan gerak, atau “Penuh” untuk pengalaman paling hidup."
+            >
+              <SegmentedControl<MotionPreference>
+                value={settings.motion}
+                onChange={(motion) => update({ motion })}
+                options={MOTION_OPTIONS}
               />
             </SettingItem>
           </Card>

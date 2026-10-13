@@ -11,6 +11,9 @@ import { GrowthBloom } from '../../../components/charts/GrowthBloom'
 import { GrowthRadar } from '../../../components/charts/GrowthRadar'
 import { DimensionBars } from '../../../components/charts/DimensionBars'
 import { BadgeGrid } from '../../../components/progress/BadgeGrid'
+import { CountUp } from '../../../components/motion/CountUp'
+import { Reveal } from '../../../components/motion/Reveal'
+import { Stagger, StaggerItem } from '../../../components/motion/Stagger'
 
 type Tab = 'PPP' | 'WORK_READINESS'
 
@@ -36,10 +39,14 @@ export function ProgressScreen() {
       />
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:grid lg:grid-cols-12 lg:items-start lg:gap-6 lg:px-8 lg:pb-14 lg:pt-6">
-        <Card className="flex flex-col items-center gap-3 pb-5 lg:col-span-5 lg:col-start-1 lg:row-start-1">
+        <Reveal variant="bloom" className="lg:col-span-5 lg:col-start-1 lg:row-start-1">
+        <Card className="flex flex-col items-center gap-3 pb-5">
           <GrowthBloom petals={petals} size={224} interactive />
           <div className="text-center">
-            <p className="text-3xl font-extrabold text-fg">{average}</p>
+            <CountUp
+              value={average}
+              className="text-3xl font-extrabold text-fg"
+            />
             <p className="text-sm text-fg-muted">
               rata-rata {DIMENSION_GROUP_LABEL[tab].toLowerCase()}
             </p>
@@ -49,8 +56,10 @@ export function ProgressScreen() {
             mekar bunga tumbuhmu.
           </p>
         </Card>
+        </Reveal>
 
-        <div className="flex flex-col gap-5 lg:col-span-7 lg:col-start-6 lg:row-start-1">
+        <Stagger className="flex flex-col gap-5 lg:col-span-7 lg:col-start-6 lg:row-start-1">
+          <StaggerItem>
           <SegmentedControl<Tab>
           value={tab}
           onChange={setTab}
@@ -59,7 +68,9 @@ export function ProgressScreen() {
             { value: 'WORK_READINESS', label: 'Kesiapan Kerja', icon: 'briefcase' },
           ]}
         />
+        </StaggerItem>
 
+        <StaggerItem>
         <Card>
           <div className="mb-1 flex items-center gap-2">
             <h2 className="flex-1 text-[15px] font-bold text-fg">
@@ -73,22 +84,29 @@ export function ProgressScreen() {
             color={tab === 'PPP' ? 'var(--accent-strong)' : 'var(--success)'}
           />
         </Card>
+        </StaggerItem>
 
+        <StaggerItem>
         <Card>
           <h2 className="mb-3 text-[15px] font-bold text-fg">Rincian dimensi</h2>
           <DimensionBars scores={scores} />
         </Card>
+        </StaggerItem>
 
+        <StaggerItem>
         <InsightCard scores={scores} tab={tab} />
+        </StaggerItem>
 
-      </div>
+      </Stagger>
 
-      <section className="lg:col-span-12 lg:row-start-3">
+      <Reveal className="lg:col-span-12 lg:row-start-3">
+        <section>
           <h2 className="mb-2.5 text-[15px] font-bold text-fg">
             Lencana & pencapaian
           </h2>
           <BadgeGrid major={currentStudent.major} awards={badges} />
         </section>
+      </Reveal>
       </main>
     </>
   )
