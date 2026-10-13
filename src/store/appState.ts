@@ -10,11 +10,14 @@ import type {
   PklStatus,
   Student,
   Target,
+  Teacher,
+  UserRole,
 } from '../types'
 import { SEED_STUDENTS, DEFAULT_STUDENT_ID } from '../data/students'
 import { SEED_JOURNALS } from '../data/journals'
 import { SEED_TARGETS } from '../data/targets'
 import { SEED_CHATS } from '../data/chats'
+import { DEFAULT_TEACHER_ID, SEED_TEACHERS, getTeacher } from '../data/teachers'
 import {
   characterAverage,
   computeBadges,
@@ -25,9 +28,12 @@ import type { PersistedState } from '../lib/storage'
 
 export interface AppState {
   hydrated: boolean
+  role: UserRole | null
   onboarded: boolean
   currentStudentId: string
+  currentTeacherId: string
   students: Student[]
+  teachers: Teacher[]
   journals: JournalEntry[]
   targets: Target[]
   chats: ChatSession[]
@@ -36,9 +42,12 @@ export interface AppState {
 export function createInitialState(): AppState {
   return {
     hydrated: false,
+    role: null,
     onboarded: false,
     currentStudentId: DEFAULT_STUDENT_ID,
+    currentTeacherId: DEFAULT_TEACHER_ID,
     students: SEED_STUDENTS,
+    teachers: SEED_TEACHERS,
     journals: SEED_JOURNALS,
     targets: SEED_TARGETS,
     chats: SEED_CHATS,
@@ -55,6 +64,8 @@ export interface NewStudentInput {
 
 export type AppAction =
   | { type: 'HYDRATE'; payload?: PersistedState }
+  | { type: 'LOGIN'; payload: { role: UserRole; teacherId?: string } }
+  | { type: 'LOGOUT' }
   | { type: 'COMPLETE_ONBOARDING'; payload: NewStudentInput }
   | { type: 'ENTER_DEMO'; payload: string }
   | { type: 'SET_STUDENT'; payload: string }
@@ -99,8 +110,24 @@ export function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'HYDRATE': {
       if (!action.payload) return { ...state, hydrated: true }
-      return { ...action.payload, hydrated: true }
+      const persisted = action.payload
+      return {
+        ...state,
+        ...persisted,
+        role: persisted.role ?? state.role,
+        currentTeacherId: persisted.currentTeacherId ?? state.currentTeacherId,
+        teachers: persisted.teachers?.length ? persisted.teachers : state.teachers,
+        hydrated: true,
+      }
     }
+    case 'LOGIN':
+      return {
+        ...state,
+        role: action.payload.role,
+        currentTeacherId: action.payload.teacherId ?? state.currentTeacherId,
+      }
+    case 'LOGOUT':
+      return { ...state, role: null }
     case 'COMPLETE_ONBOARDING': {
       const student = makeStudent(action.payload)
       const others = state.students.filter((s) => s.id !== 'me')
@@ -158,6 +185,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
 
 export interface Derived {
   currentStudent: Student
+  currentTeacher: Teacher
   characterScores: DimensionScore[]
   workScores: DimensionScore[]
   pppAverage: number
@@ -171,6 +199,7 @@ export function derive(state: AppState): Derived {
   const currentStudent =
     state.students.find((s) => s.id === state.currentStudentId) ??
     state.students[0]
+  const currentTeacher = getTeacher(state.teachers, state.currentTeacherId)
   const id = currentStudent.id
   const characterScores = scoreGroup(
     'PPP',
@@ -188,6 +217,7 @@ export function derive(state: AppState): Derived {
   )
   return {
     currentStudent,
+    currentTeacher,
     characterScores,
     workScores,
     pppAverage: characterAverage(characterScores),

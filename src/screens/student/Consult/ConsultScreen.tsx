@@ -1,4 +1,4 @@
-import { TopBar } from '../../components/layout/TopBar'
+import { TopBar } from '../../../components/layout/TopBar'
 import { ConsultList } from './ConsultList'
 
 export function ConsultScreen() {

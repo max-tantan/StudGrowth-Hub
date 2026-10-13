@@ -29,9 +29,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!state.hydrated) return
     saveState({
+      role: state.role,
       onboarded: state.onboarded,
       currentStudentId: state.currentStudentId,
+      currentTeacherId: state.currentTeacherId,
       students: state.students,
+      teachers: state.teachers,
       journals: state.journals,
       targets: state.targets,
       chats: state.chats,
@@ -46,6 +49,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return {
       state,
       ...derived,
+      loginAsStudent: () => dispatch({ type: 'LOGIN', payload: { role: 'student' } }),
+      loginAsTeacher: (teacherId: string) =>
+        dispatch({ type: 'LOGIN', payload: { role: 'teacher', teacherId } }),
+      logout: () => dispatch({ type: 'LOGOUT' }),
       completeOnboarding: (input: NewStudentInput) => {
         dispatch({ type: 'COMPLETE_ONBOARDING', payload: input })
       },

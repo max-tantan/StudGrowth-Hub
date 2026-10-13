@@ -133,4 +133,97 @@ export const SEED_CHATS: ChatSession[] = [
       ),
     ],
   ),
+  session(
+    'cs-fa-1',
+    'fajar',
+    'PKL',
+    'Jam kerja & uang saku di tempat PKL',
+    1,
+    1,
+    [
+      msg(
+        'm1',
+        'user',
+        'Pak, di tempat PKL aku sering disuruh lembur terus, kadang sampai malam. Uang saku yang dijanjikan juga belum dibayar.',
+        daysAgo(1, 19, 10),
+      ),
+      msg(
+        'm2',
+        'ai',
+        'Terima kasih sudah berani cerita. Yang kamu alami itu tidak wajar, dan kamu berhak mendapat perlakuan yang adil. Coba catat tanggal, jam, dan tugas yang diminta, lalu ceritakan ke pembimbing PKL atau Guru BK agar bisa dibantu menindaklanjuti dengan aman.',
+        daysAgo(1, 19, 11),
+        {
+          risk: {
+            category: 'pkl-eksploitasi',
+            severity: 'sedang',
+            label: 'Dugaan eksploitasi di tempat PKL',
+          },
+          escalatedTo: ['Guru BK', 'Pembimbing PKL', 'Kaprog'],
+        },
+      ),
+    ],
+    true,
+  ),
+  session(
+    'cs-jo-1',
+    'joko',
+    'SOSIAL',
+    'Sulit berhenti main gim',
+    2,
+    2,
+    [
+      msg(
+        'm1',
+        'user',
+        'Aku susah banget berhenti main game sampai lupa belajar dan sering begadang.',
+        daysAgo(2, 20, 0),
+      ),
+      msg(
+        'm2',
+        'ai',
+        'Terima kasih sudah jujur. Mengakui ini butuh keberanian. Coba kita mulai kecil: pilih satu waktu belajar yang mau kamu jaga tiap hari, lalu simpan gim di luar jangkauan saat jam itu. Menurutmu, jam berapa yang paling mungkin kamu jaga?',
+        daysAgo(2, 20, 1),
+        {
+          risk: {
+            category: 'kecanduan',
+            severity: 'sedang',
+            label: 'Kecanduan gim atau media sosial',
+          },
+          escalatedTo: ['Guru BK'],
+        },
+      ),
+    ],
+    true,
+  ),
+  session(
+    'cs-ci-1',
+    'citra',
+    'SOSIAL',
+    'Merasa tidak kuat lagi',
+    1,
+    1,
+    [
+      msg(
+        'm1',
+        'user',
+        'Akhir-akhir ini aku capek banget dan ngerasa gak ada yang peduli. Kayaknya aku gak kuat lagi.',
+        daysAgo(1, 21, 0),
+      ),
+      msg(
+        'm2',
+        'ai',
+        'Terima kasih sudah mau cerita, itu langkah yang berani. Kamu tidak sendirian, dan perasaanmu penting. Tolong hubungi Guru BK atau orang dewasa yang kamu percaya hari ini — kalau bisa temui langsung. Kalau pikiran itu datang lagi, coba tarik napas pelan dan cari satu orang yang aman untuk kamu temani.',
+        daysAgo(1, 21, 1),
+        {
+          risk: {
+            category: 'krisis',
+            severity: 'tinggi',
+            label: 'Krisis emosional',
+          },
+          escalatedTo: ['Guru BK'],
+        },
+      ),
+    ],
+    true,
+  ),
 ]

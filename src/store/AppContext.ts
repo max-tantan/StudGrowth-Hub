@@ -5,6 +5,9 @@ import type { AppState, Derived, NewStudentInput } from './appState'
 
 export interface AppContextValue extends Derived {
   state: AppState
+  loginAsStudent: () => void
+  loginAsTeacher: (teacherId: string) => void
+  logout: () => void
   completeOnboarding: (input: NewStudentInput) => void
   enterDemo: (id: string) => void
   setCurrentStudent: (id: string) => void

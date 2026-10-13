@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import { useApp } from '../../store/AppContext'
-import { TopBar } from '../../components/layout/TopBar'
-import { Button } from '../../components/ui/Button'
-import { Icon } from '../../components/ui/Icon'
+import { useApp } from '../../../store/AppContext'
+import { TopBar } from '../../../components/layout/TopBar'
+import { Button } from '../../../components/ui/Button'
+import { Icon } from '../../../components/ui/Icon'
 import { JournalList } from './JournalList'
 
 export function JournalScreen() {

@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
-import { Button } from '../../components/ui/Button'
+import { Button } from '../../../components/ui/Button'
 import { JournalList } from './JournalList'
 
 export function JournalLayout() {

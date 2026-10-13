@@ -2,6 +2,27 @@ export type Major = 'PERHOTELAN' | 'AKUNTANSI' | 'PPLG'
 export type Grade = 'X' | 'XI' | 'XII'
 export type PklStatus = 'belum' | 'sedang' | 'selesai'
 
+export type UserRole = 'student' | 'teacher'
+
+export type TeacherRole =
+  | 'WALI_KELAS'
+  | 'GURU_BK'
+  | 'PEMBIMBING_PKL'
+  | 'KAPROG'
+  | 'ADMIN'
+
+export interface Teacher {
+  id: string
+  name: string
+  initials: string
+  role: TeacherRole
+  title: string
+  major?: Major
+  grade?: Grade
+  homeroom?: string
+  email: string
+}
+
 export type DimensionGroup = 'PPP' | 'WORK_READINESS'
 
 export type ChatMode =

@@ -3,14 +3,19 @@ import type {
   JournalEntry,
   Student,
   Target,
+  Teacher,
+  UserRole,
 } from '../types'
 
 const KEY = 'ruang-tumbuh:state:v1'
 
 export interface PersistedState {
+  role?: UserRole | null
   onboarded: boolean
   currentStudentId: string
+  currentTeacherId?: string
   students: Student[]
+  teachers?: Teacher[]
   journals: JournalEntry[]
   targets: Target[]
   chats: ChatSession[]
@@ -22,7 +27,13 @@ export function loadState(): PersistedState | null {
     if (!raw) return null
     const parsed = JSON.parse(raw) as PersistedState
     if (!parsed.students?.length || !parsed.currentStudentId) return null
-    return parsed
+    // Backward compatibility: earlier saved states predate role/teachers.
+    return {
+      ...parsed,
+      role: parsed.role ?? 'student',
+      currentTeacherId: parsed.currentTeacherId,
+      teachers: parsed.teachers,
+    }
   } catch {
     return null
   }
