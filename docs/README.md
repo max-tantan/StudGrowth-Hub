@@ -12,6 +12,7 @@ karakter dan kesiapan kerja untuk murid SMK, lengkap dengan modul guru.
 | [`data-model.md`](data-model.md) | Tipe/entitas, relasi, data seed, skema localStorage | Developer fitur & data |
 | [`design-system.md`](design-system.md) | Token warna/tipografi, komponen UI, konvensi visual, motion | Frontend & desain |
 | [`roles-and-routing.md`](roles-and-routing.md) | Dua role pengguna, login, gating rute, cakupan data guru | Developer fitur & QA |
+| [`endpoints-and-accounts.md`](endpoints-and-accounts.md) | Daftar rute SPA & akun demo (guru + murid) | Developer, QA, demo |
 | [`scoring-and-risk.md`](scoring-and-risk.md) | Rumus skor, lencana, streak, deteksi & eskalasi risiko | Developer fitur & data |
 | [`conventions.md`](conventions.md) | Aturan kode, penamaan, script, checklist kontribusi | Kontributor |
 
@@ -24,6 +25,8 @@ karakter dan kesiapan kerja untuk murid SMK, lengkap dengan modul guru.
 3. **Mengerjakan UI?** Baca [`design-system.md`](design-system.md) dan
    [`conventions.md`](conventions.md).
 4. **Menambah role atau halaman?** Baca [`roles-and-routing.md`](roles-and-routing.md).
+5. **Mau mencoba/mengetes aplikasi?** Lihat rute dan akun demo di
+   [`endpoints-and-accounts.md`](endpoints-and-accounts.md).
 
 ## Konvensi Dokumentasi
 

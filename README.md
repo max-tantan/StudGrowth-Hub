@@ -87,5 +87,6 @@ Penjelasan lengkap ada di [`docs/architecture.md`](docs/architecture.md).
 | [`docs/data-model.md`](docs/data-model.md) | Tipe, relasi, seed, persistensi |
 | [`docs/design-system.md`](docs/design-system.md) | Token & komponen UI |
 | [`docs/roles-and-routing.md`](docs/roles-and-routing.md) | Role, login, gating rute |
+| [`docs/endpoints-and-accounts.md`](docs/endpoints-and-accounts.md) | Rute SPA & akun demo |
 | [`docs/scoring-and-risk.md`](docs/scoring-and-risk.md) | Skor, lencana, risiko |
 | [`docs/conventions.md`](docs/conventions.md) | Konvensi & kontribusi |
