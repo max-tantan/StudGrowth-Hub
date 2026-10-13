@@ -46,10 +46,7 @@ export function LoginScreen() {
         </div>
 
         <div className="my-10 max-w-[30ch] lg:my-0">
-          <span className="inline-flex items-center rounded-full bg-surface/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-accent-strong ring-1 ring-border">
-            SMK Yadika
-          </span>
-          <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-fg lg:text-[52px]">
+          <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-fg lg:text-[52px]">
             Tumbuh terarah, siap berkarya.
           </h1>
           <p className="mt-4 text-[15px] leading-relaxed text-fg-muted text-pretty">
