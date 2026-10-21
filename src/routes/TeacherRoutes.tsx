@@ -27,6 +27,11 @@ const PklMonitoringScreen = lazy(() =>
     default: m.PklMonitoringScreen,
   })),
 )
+const TeacherSettingsScreen = lazy(() =>
+  import('../screens/teacher/Settings/TeacherSettingsScreen').then((m) => ({
+    default: m.TeacherSettingsScreen,
+  })),
+)
 
 export function TeacherRoutes() {
   return (
@@ -38,6 +43,7 @@ export function TeacherRoutes() {
           <Route path="/guru/alert" element={<RiskAlertsScreen />} />
           <Route path="/guru/murid" element={<StudentsScreen />} />
           <Route path="/guru/pkl" element={<PklMonitoringScreen />} />
+          <Route path="/guru/pengaturan" element={<TeacherSettingsScreen />} />
         </Route>
         <Route path="*" element={<Navigate to="/guru" replace />} />
       </Routes>

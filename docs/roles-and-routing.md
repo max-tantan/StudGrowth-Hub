@@ -95,10 +95,15 @@ Semua berada di dalam `TeacherShell`.
 | `/guru/alert` | `RiskAlerts/RiskAlertsScreen` |
 | `/guru/murid` | `Students/StudentsScreen` |
 | `/guru/pkl` | `Pkl/PklMonitoringScreen` |
+| `/guru/pengaturan` | `Settings/TeacherSettingsScreen` |
 
 URL tak dikenal dialihkan ke `/guru`. Navigasi didefinisikan di
 `src/components/teacher/teacherNav.ts` (`TEACHER_NAV`), dengan `badgeKey`
 opsional (`review`/`alert`) untuk menampilkan angka notifikasi.
+
+> `/guru/pengaturan` **tidak** masuk `TEACHER_NAV` supaya bar bawah mobile tidak
+> penuh. Halamannya diakses lewat ikon gear di sidebar/top bar/header mobile
+> atau lewat command palette (`TeacherCommandPalette` → "Pengaturan guru").
 
 ## 4. Cakupan Data Guru (`src/lib/teacher.ts`)
 

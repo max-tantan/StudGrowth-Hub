@@ -1,49 +1,28 @@
 import { useState } from 'react'
-import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { ThemePreference } from '../../../lib/theme'
-import { getThemePreference, setThemePreference } from '../../../lib/theme'
-import { useSettings, type TextScale, type MotionPreference } from '../../../lib/settings'
-import {
-  COLOR_BLIND_OPTIONS,
-  type ColorBlindMode,
-} from '../../../lib/colorBlind'
+import { useSettings } from '../../../lib/settings'
 import { useApp } from '../../../store/AppContext'
-import { cn } from '../../../lib/cn'
 import { TopBar } from '../../../components/layout/TopBar'
 import { Button } from '../../../components/ui/Button'
 import { Card } from '../../../components/ui/Card'
 import { Icon } from '../../../components/ui/Icon'
-import type { IconName } from '../../../components/ui/icons'
-import { SegmentedControl } from '../../../components/ui/SegmentedControl'
 import { Sheet } from '../../../components/ui/Sheet'
 import { Switch } from '../../../components/ui/Switch'
 import { useTour } from '../../../components/tour/TourContext'
-
-const TEXT_SCALE_OPTIONS: { value: TextScale; label: string }[] = [
-  { value: 'normal', label: 'Normal' },
-  { value: 'besar', label: 'Besar' },
-  { value: 'sangat-besar', label: 'Ekstra' },
-]
-
-const MOTION_OPTIONS: { value: MotionPreference; label: string; icon: IconName }[] = [
-  { value: 'system', label: 'Sistem', icon: 'monitor' },
-  { value: 'reduce', label: 'Reduksi', icon: 'minus' },
-  { value: 'full', label: 'Penuh', icon: 'sparkle' },
-]
+import { AccessibilitySection } from '../../../components/settings/AccessibilitySection'
+import { DisplaySection } from '../../../components/settings/DisplaySection'
+import {
+  InfoRow,
+  SettingsDivider,
+  SettingsSectionTitle,
+} from '../../../components/settings/SettingsParts'
 
 export function SettingsScreen() {
   const navigate = useNavigate()
   const { resetDemo } = useApp()
   const { settings, update } = useSettings()
   const { start } = useTour()
-  const [theme, setTheme] = useState<ThemePreference>(getThemePreference)
   const [resetOpen, setResetOpen] = useState(false)
-
-  const chooseTheme = (pref: ThemePreference) => {
-    setTheme(pref)
-    setThemePreference(pref)
-  }
 
   return (
     <>
@@ -57,66 +36,12 @@ export function SettingsScreen() {
           </p>
         </div>
 
-        <section>
-          <SectionTitle icon="palette">Tampilan</SectionTitle>
-          <Card className="flex flex-col gap-5">
-            <SettingItem
-              label="Tema"
-              description="Mode gelap mengikuti perangkatmu bila memilih “Sistem”."
-            >
-              <SegmentedControl<ThemePreference>
-                value={theme}
-                onChange={chooseTheme}
-                options={[
-                  { value: 'system', label: 'Sistem', icon: 'monitor' },
-                  { value: 'light', label: 'Terang', icon: 'sun' },
-                  { value: 'dark', label: 'Gelap', icon: 'moon' },
-                ]}
-              />
-            </SettingItem>
+        <DisplaySection />
 
-            <Divider />
-
-            <SettingItem
-              label="Modus buta warna"
-              description="Tukar palet data & status agar tetap bisa dibedakan. Perubahan tampil seketika."
-            >
-              <ColorBlindGrid
-                mode={settings.colorBlind}
-                onChange={(mode) => update({ colorBlind: mode })}
-              />
-            </SettingItem>
-
-            <Divider />
-
-            <SettingItem
-              label="Skala teks"
-              description="Perbesar teks di seluruh aplikasi untuk kenyamanan membaca."
-            >
-              <SegmentedControl<TextScale>
-                value={settings.textScale}
-                onChange={(textScale) => update({ textScale })}
-                options={TEXT_SCALE_OPTIONS}
-              />
-            </SettingItem>
-
-            <Divider />
-
-            <SettingItem
-              label="Animasi"
-              description="Pilih “Sistem” agar mengikuti pengaturan perangkat, “Reduksi” untuk meminimalkan gerak, atau “Penuh” untuk pengalaman paling hidup."
-            >
-              <SegmentedControl<MotionPreference>
-                value={settings.motion}
-                onChange={(motion) => update({ motion })}
-                options={MOTION_OPTIONS}
-              />
-            </SettingItem>
-          </Card>
-        </section>
+        <AccessibilitySection />
 
         <section>
-          <SectionTitle icon="bell">Pemberitahuan</SectionTitle>
+          <SettingsSectionTitle icon="bell">Pemberitahuan</SettingsSectionTitle>
           <Card className="flex flex-col gap-4">
             <Switch
               checked={settings.notificationsJournal}
@@ -124,7 +49,7 @@ export function SettingsScreen() {
               label="Pengingat jurnal harian"
               description="Ingatkan menulis refleksi singkat setiap hari."
             />
-            <Divider />
+            <SettingsDivider />
             <Switch
               checked={settings.notificationsRisk}
               onChange={(v) => update({ notificationsRisk: v })}
@@ -135,25 +60,23 @@ export function SettingsScreen() {
         </section>
 
         <section>
-          <SectionTitle icon="compass">Panduan</SectionTitle>
+          <SettingsSectionTitle icon="compass">Panduan</SettingsSectionTitle>
           <Card className="flex flex-col gap-3">
-            <SettingItem
-              label="Tur Ruang Tumbuh"
-              description="Tampilkan lagi penjelasan setiap fitur, lengkap dengan penanda di layar yang sedang dibahas."
-            >
-              <Button
-                variant="secondary"
-                icon="compass"
-                onClick={start}
-              >
-                Tonton ulang panduan
-              </Button>
-            </SettingItem>
+            <div>
+              <p className="text-sm font-bold text-fg">Tur Ruang Tumbuh</p>
+              <p className="mt-0.5 text-xs text-fg-muted text-pretty">
+                Tampilkan lagi penjelasan setiap fitur, lengkap dengan penanda di
+                layar yang sedang dibahas.
+              </p>
+            </div>
+            <Button variant="secondary" icon="compass" onClick={start}>
+              Tonton ulang panduan
+            </Button>
           </Card>
         </section>
 
         <section>
-          <SectionTitle icon="shieldCheck">Privasi & data</SectionTitle>
+          <SettingsSectionTitle icon="shieldCheck">Privasi & data</SettingsSectionTitle>
           <div className="flex flex-col gap-2.5">
             <Card variant="outline" className="flex items-start gap-2.5">
               <Icon
@@ -177,7 +100,7 @@ export function SettingsScreen() {
         </section>
 
         <section>
-          <SectionTitle icon="gear">Tentang</SectionTitle>
+          <SettingsSectionTitle icon="gear">Tentang</SettingsSectionTitle>
           <Card className="divide-y divide-border">
             <InfoRow label="Aplikasi" value="Ruang Tumbuh" />
             <InfoRow label="Versi" value="Prototipe v0.1" />
@@ -220,110 +143,5 @@ export function SettingsScreen() {
         </p>
       </Sheet>
     </>
-  )
-}
-
-function SectionTitle({
-  icon,
-  children,
-}: {
-  icon: IconName
-  children: ReactNode
-}) {
-  return (
-    <h2 className="mb-2.5 flex items-center gap-2 text-[15px] font-bold text-fg">
-      <Icon name={icon} size={17} weight="duotone" className="text-accent-strong" />
-      {children}
-    </h2>
-  )
-}
-
-function SettingItem({
-  label,
-  description,
-  children,
-}: {
-  label: string
-  description: string
-  children: ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-3">
-      <div>
-        <p className="text-sm font-bold text-fg">{label}</p>
-        <p className="mt-0.5 text-xs text-fg-muted text-pretty">{description}</p>
-      </div>
-      {children}
-    </div>
-  )
-}
-
-function Divider() {
-  return <div className="h-px bg-border" />
-}
-
-function ColorBlindGrid({
-  mode,
-  onChange,
-}: {
-  mode: ColorBlindMode
-  onChange: (mode: ColorBlindMode) => void
-}) {
-  return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-      {COLOR_BLIND_OPTIONS.map((opt) => {
-        const active = opt.id === mode
-        return (
-          <button
-            key={opt.id}
-            type="button"
-            aria-pressed={active}
-            onClick={() => onChange(opt.id)}
-            className={cn(
-              'rounded-[var(--radius-card)] border p-3 text-left transition-all duration-200',
-              'hover:border-border-strong active:scale-[0.98]',
-              active
-                ? 'border-accent bg-accent-tint'
-                : 'border-border bg-surface-2',
-            )}
-          >
-            <span className="flex items-center justify-between gap-1">
-              <span className="flex flex-wrap items-center gap-1">
-                {opt.swatches.map((c) => (
-                  <span
-                    key={c}
-                    className="h-3 w-3 rounded-full ring-1 ring-black/5"
-                    style={{ background: c }}
-                  />
-                ))}
-              </span>
-              {active && (
-                <Icon
-                  name="check"
-                  size={14}
-                  weight="bold"
-                  className="shrink-0 text-accent-strong"
-                />
-              )}
-            </span>
-            <span className="mt-2 block text-[13px] font-bold text-fg">
-              {opt.label}
-            </span>
-            <span className="mt-0.5 block text-[11px] leading-snug text-fg-muted">
-              {opt.description}
-            </span>
-          </button>
-        )
-      })}
-    </div>
-  )
-}
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
-      <span className="text-sm text-fg-muted">{label}</span>
-      <span className="text-sm font-semibold text-fg">{value}</span>
-    </div>
   )
 }

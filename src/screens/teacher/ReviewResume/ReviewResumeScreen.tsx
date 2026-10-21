@@ -21,6 +21,8 @@ import { getDimension } from '../../../config/dimensions'
 import { useIsDesktop } from '../../../lib/media'
 import { MOOD_MAP, formatShort, relativeLabel } from '../../../lib/format'
 import { cn } from '../../../lib/cn'
+import { useTeacherPrefs } from '../../../lib/teacherSettings'
+import { useStudentNaming } from '../../../components/teacher/useStudentNaming'
 
 type MajorFilter = Major | 'ALL'
 
@@ -28,6 +30,8 @@ export function ReviewResumeScreen() {
   const { state, currentTeacher } = useApp()
   const roster = rosterForTeacher(state, currentTeacher)
   const isDesktop = useIsDesktop()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const { name, initials } = useStudentNaming()
 
   const [major, setMajor] = useState<MajorFilter>('ALL')
   const [pkl, setPkl] = useState<PklStatus | 'ALL'>('ALL')
@@ -40,10 +44,10 @@ export function ReviewResumeScreen() {
     return roster
       .filter((s) => major === 'ALL' || s.major === major)
       .filter((s) => pkl === 'ALL' || s.pklStatus === pkl)
-      .filter((s) => s.name.toLowerCase().includes(query.toLowerCase()))
+      .filter((s) => name(s.name).toLowerCase().includes(query.toLowerCase()))
       .map((s) => ({ student: s, week: buildWeekSummary(s.id, state, weekOffset) }))
       .sort((a, b) => b.week.entries.length - a.week.entries.length)
-  }, [roster, major, pkl, query, state, weekOffset])
+  }, [roster, major, pkl, query, state, weekOffset, name])
 
   const withEntries = rows.filter((r) => r.week.entries.length > 0)
   const explicit = openId ? (rows.find((r) => r.student.id === openId) ?? null) : null
@@ -67,9 +71,11 @@ export function ReviewResumeScreen() {
         title="Review resume murid"
         description="Tinjau rekap mingguan murid binaanmu, beri catatan, lalu tandai selesai direview."
         actions={
-          <Chip tone={pendingCount ? 'accent' : 'success'} icon="clipboard">
-            {pendingCount} menunggu
-          </Chip>
+          prefs.notifyWeeklyReview ? (
+            <Chip tone={pendingCount ? 'accent' : 'success'} icon="clipboard">
+              {pendingCount} menunggu
+            </Chip>
+          ) : null
         }
       />
 
@@ -80,6 +86,7 @@ export function ReviewResumeScreen() {
           </div>
           <SegmentedControl<'0' | '1'>
             className="sm:w-auto"
+            label="Periode rekap mingguan"
             value={String(weekOffset) as '0' | '1'}
             onChange={(v) => setWeekOffset(v === '0' ? 0 : 1)}
             options={[
@@ -150,10 +157,25 @@ export function ReviewResumeScreen() {
                       {active && (
                         <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-full bg-accent" />
                       )}
-                      <Avatar name={student.name} initials={student.initials} size="md" />
+                      {prefs.showAvatars ? (
+                        <Avatar
+                          name={name(student.name)}
+                          initials={initials(student.initials)}
+                          size="md"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden="true"
+                          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-sm font-bold text-fg-muted"
+                        >
+                          {initials(student.initials)}
+                        </span>
+                      )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="truncate text-sm font-bold text-fg">{student.name}</p>
+                          <p className="truncate text-sm font-bold text-fg">
+                            {name(student.name)}
+                          </p>
                           {done && (
                             <Icon
                               name="checkCircle"
@@ -196,7 +218,7 @@ export function ReviewResumeScreen() {
                 <div className="mb-4 flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-fg-subtle">
-                      Resume {selected.student.name}
+                      Resume {name(selected.student.name)}
                     </p>
                     <p className="mt-1 text-[13px] text-fg-muted">
                       {selected.week.label} · {formatShort(selected.week.rangeStart)} –{' '}
@@ -261,7 +283,7 @@ export function ReviewResumeScreen() {
         open={!isDesktop && Boolean(explicit)}
         onClose={() => setOpenId(null)}
         week={explicit?.week ?? null}
-        studentName={explicit?.student.name ?? ''}
+        studentName={explicit ? name(explicit.student.name) : ''}
         reviewed={Boolean(
           explicit && reviewed[`${explicit.student.id}:${explicit.week.id}`],
         )}

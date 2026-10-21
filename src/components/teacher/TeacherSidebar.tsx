@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 import { Icon } from '../ui/Icon'
 import { IconButton } from '../ui/Button'
@@ -9,16 +9,23 @@ import { useApp } from '../../store/AppContext'
 import { TEACHER_ROLE_META } from '../../config/teacherRoles'
 import { isDarkNow, setThemePreference } from '../../lib/theme'
 import { useTour } from '../tour/TourContext'
+import { useTeacherPrefs } from '../../lib/teacherSettings'
 import { TEACHER_NAV, TEACHER_NAV_GROUPS } from './teacherNav'
 
 interface TeacherSidebarProps {
   reviewCount?: number
   alertCount?: number
+  pklCount?: number
 }
 
-export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSidebarProps) {
+export function TeacherSidebar({
+  reviewCount = 0,
+  alertCount = 0,
+  pklCount = 0,
+}: TeacherSidebarProps) {
   const { currentTeacher, logout } = useApp()
   const { start } = useTour()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
   const [dark, setDark] = useState(isDarkNow)
   const role = TEACHER_ROLE_META[currentTeacher.role]
 
@@ -41,15 +48,26 @@ export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSideb
       </div>
 
       <div className="px-4 pt-4">
-        <div className="flex items-center gap-3 rounded-[20px] border border-border bg-surface-2/60 p-3">
+        <Link
+          to="/guru/pengaturan"
+          className="flex items-center gap-3 rounded-[20px] border border-border bg-surface-2/60 p-3 transition-colors duration-200 hover:border-border-strong hover:bg-surface-2"
+        >
           <Avatar name={currentTeacher.name} initials={currentTeacher.initials} size="md" />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[13px] font-bold text-fg">{currentTeacher.name}</p>
+            <p className="truncate text-[13px] font-bold text-fg">
+              {currentTeacher.name}
+            </p>
             <p className="truncate text-[11px] font-medium text-fg-subtle">
               {currentTeacher.title}
             </p>
           </div>
-        </div>
+          <Icon
+            name="gear"
+            size={16}
+            weight="duotone"
+            className="shrink-0 text-fg-subtle"
+          />
+        </Link>
         <div className="mt-2 flex items-center gap-1.5 px-1">
           <Chip tone="accent" icon={role.icon}>
             {role.label}
@@ -70,10 +88,18 @@ export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSideb
                 {items.map((item) => {
                   const count =
                     item.badgeKey === 'review'
-                      ? reviewCount
-                      : item.badgeKey === 'alert'
-                        ? alertCount
+                      ? prefs.notifyWeeklyReview
+                        ? reviewCount
                         : 0
+                      : item.badgeKey === 'alert'
+                        ? prefs.notifyNewAlert
+                          ? alertCount
+                          : 0
+                        : item.badgeKey === 'pkl'
+                          ? prefs.notifyPklUpdate
+                            ? pklCount
+                            : 0
+                          : 0
                   return (
                     <NavLink
                       key={item.to}
@@ -107,7 +133,9 @@ export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSideb
                                 'flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold',
                                 item.badgeKey === 'alert'
                                   ? 'bg-danger-tint text-danger'
-                                  : 'bg-accent text-fg-on-accent',
+                                  : item.badgeKey === 'pkl'
+                                    ? 'bg-warning-tint text-warning'
+                                    : 'bg-accent text-fg-on-accent',
                               )}
                             >
                               {count}

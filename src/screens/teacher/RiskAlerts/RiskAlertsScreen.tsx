@@ -15,6 +15,8 @@ import { allRiskAlerts, rosterForTeacher } from '../../../lib/teacher'
 import type { RiskAlert } from '../../../lib/teacher'
 import { RISK_CATEGORY_LABEL } from '../../../config/teacherRoles'
 import { relativeLabel } from '../../../lib/format'
+import { useTeacherPrefs } from '../../../lib/teacherSettings'
+import { useStudentNaming } from '../../../components/teacher/useStudentNaming'
 
 type Severity = 'ALL' | 'tinggi' | 'sedang'
 type MajorFilter = Major | 'ALL'
@@ -132,7 +134,9 @@ function TranscriptSheet({
   alert: RiskAlert | null
   onClose: () => void
 }) {
-  const { state } = useApp()
+  const { state, currentTeacher } = useApp()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const { name, initials } = useStudentNaming()
   const session = alert
     ? state.chats.find((c) => c.id === alert.sessionId)
     : undefined
@@ -141,7 +145,7 @@ function TranscriptSheet({
     <Sheet
       open={Boolean(alert)}
       onClose={onClose}
-      title={alert ? `Transkrip · ${alert.student.name}` : ''}
+      title={alert ? `Transkrip · ${name(alert.student.name)}` : ''}
       description={alert ? session?.title : ''}
       footer={
         <Button block icon="checkSquare" onClick={onClose}>
@@ -164,7 +168,20 @@ function TranscriptSheet({
                 {relativeLabel(alert.at)}
               </p>
             </div>
-            <Avatar name={alert.student.name} initials={alert.student.initials} size="sm" />
+            {prefs.showAvatars ? (
+              <Avatar
+                name={name(alert.student.name)}
+                initials={initials(alert.student.initials)}
+                size="sm"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 text-sm font-bold text-fg-muted"
+              >
+                {initials(alert.student.initials)}
+              </span>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -198,7 +215,7 @@ function TranscriptSheet({
                       className={m.role === 'user' ? 'opacity-80' : 'text-accent-strong'}
                     />
                     <span className="text-[10.5px] font-bold uppercase tracking-wide opacity-80">
-                      {m.role === 'user' ? alert.student.name : 'Ruang Tumbuh'}
+                      {m.role === 'user' ? name(alert.student.name) : 'Ruang Tumbuh'}
                     </span>
                   </div>
                   <p className="leading-relaxed text-pretty">{m.text}</p>

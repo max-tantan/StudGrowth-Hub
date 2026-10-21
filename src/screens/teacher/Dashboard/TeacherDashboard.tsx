@@ -19,6 +19,8 @@ import { MAJORS, MAJOR_LIST } from '../../../config/majors'
 import { TEACHER_ROLE_META } from '../../../config/teacherRoles'
 import { formatDate, greeting, relativeLabel } from '../../../lib/format'
 import { MAJOR_ICON } from '../../../components/ui/icons'
+import { useTeacherPrefs } from '../../../lib/teacherSettings'
+import { useStudentNaming } from '../../../components/teacher/useStudentNaming'
 
 export function TeacherDashboard() {
   const { state, currentTeacher } = useApp()
@@ -27,6 +29,8 @@ export function TeacherDashboard() {
   const overviews = overviewsFor(state, students)
   const alerts = allRiskAlerts(state, students)
   const role = TEACHER_ROLE_META[currentTeacher.role]
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const { name, initials } = useStudentNaming()
 
   const pending = overviews
     .filter((o) => o.pendingReview)
@@ -148,14 +152,23 @@ export function TeacherDashboard() {
                     to="/guru/review"
                     className="flex items-center gap-3 border-t border-border px-4 py-3 transition-colors duration-200 hover:bg-surface-2/60"
                   >
-                    <Avatar
-                      name={o.student.name}
-                      initials={o.student.initials}
-                      size="sm"
-                    />
+                    {prefs.showAvatars ? (
+                      <Avatar
+                        name={name(o.student.name)}
+                        initials={initials(o.student.initials)}
+                        size="sm"
+                      />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-xs font-bold text-fg-muted"
+                      >
+                        {initials(o.student.initials)}
+                      </span>
+                    )}
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-fg">
-                        {o.student.name}
+                        {name(o.student.name)}
                       </p>
                       <p className="truncate text-[12px] text-fg-subtle">
                         {MAJORS[o.student.major].name} · {o.thisWeekEntries} jurnal minggu ini
@@ -209,7 +222,7 @@ export function TeacherDashboard() {
                   />
                   <div className="min-w-0 flex-1">
                     <p className="text-[13px] font-bold text-fg">
-                      {a.student.name}
+                      {name(a.student.name)}
                     </p>
                     <p className="text-[12px] text-fg-muted">{a.flag.label}</p>
                     <p className="mt-0.5 text-[11px] text-fg-subtle">
@@ -283,7 +296,7 @@ export function TeacherDashboard() {
                         {j.title}
                       </p>
                       <p className="truncate text-[11.5px] text-fg-subtle">
-                        {student?.name ?? 'Murid'} · {relativeLabel(j.date)}
+                        {student ? name(student.name) : 'Murid'} · {relativeLabel(j.date)}
                       </p>
                     </div>
                     {j.pkl && <Chip tone="warning">PKL</Chip>}

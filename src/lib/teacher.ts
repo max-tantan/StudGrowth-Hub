@@ -263,3 +263,13 @@ export function teacherStats(
     wrAverage: wr,
   }
 }
+
+const PKL_UPDATE_WINDOW_DAYS = 7
+
+export function recentPklUpdates(state: AppState, students: Student[]): number {
+  const ids = new Set(students.map((s) => s.id))
+  const since = Date.now() - PKL_UPDATE_WINDOW_DAYS * 86_400_000
+  return state.journals.filter(
+    (j) => j.pkl && ids.has(j.studentId) && +new Date(j.date) >= since,
+  ).length
+}

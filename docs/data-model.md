@@ -178,6 +178,15 @@ Aturan penting:
 - Bidang yang hilang diisi default; lihat `HYDRATE` di `appState.ts`.
 - Kunci tema terpisah: **`ruang-tumbuh:theme`** (`system | light | dark`).
 
+Kunci `localStorage` lain (di luar `PersistedState`):
+
+| Kunci | Isi | Cakupan |
+| --- | --- | --- |
+| `ruang-tumbuh:theme` | `system \| light \| dark` | Per perangkat |
+| `ruang-tumbuh:settings:v1` | `SettingsState` (tampilan + aksesibilitas) | Per perangkat |
+| `ruang-tumbuh:teacher-settings:v1` | `Record<teacherId, TeacherPrefs>` | Per akun guru |
+| `ruang-tumbuh:tour:v1` | Status tur guide | Per perangkat |
+
 > Karena seluruh state ikut dipersist, perubahan seed **tidak otomatis masuk**
 > ke browser yang sudah pernah membuka aplikasi. Gunakan "Reset demo" di halaman
 > Profil (memanggil `resetDemo()`) atau hapus localStorage.

@@ -24,6 +24,8 @@ import {
 import type { StudentOverview } from '../../../lib/teacher'
 import { MAJORS } from '../../../config/majors'
 import { MOOD_MAP, formatDate, relativeLabel } from '../../../lib/format'
+import { useTeacherPrefs } from '../../../lib/teacherSettings'
+import { useStudentNaming } from '../../../components/teacher/useStudentNaming'
 
 type MajorFilter = Major | 'ALL'
 type GradeFilter = Grade | 'ALL'
@@ -34,6 +36,7 @@ export function StudentsScreen() {
   const roster = rosterForTeacher(state, currentTeacher)
   const overviews = useMemo(() => overviewsFor(state, roster), [state, roster])
   const alerts = allRiskAlerts(state, roster)
+  const { name } = useStudentNaming()
 
   const [params, setParams] = useSearchParams()
   const [major, setMajor] = useState<MajorFilter>('ALL')
@@ -47,7 +50,7 @@ export function StudentsScreen() {
     .filter((o) => major === 'ALL' || o.student.major === major)
     .filter((o) => grade === 'ALL' || o.student.grade === grade)
     .filter((o) => pkl === 'ALL' || o.student.pklStatus === pkl)
-    .filter((o) => o.student.name.toLowerCase().includes(query.toLowerCase()))
+    .filter((o) => name(o.student.name).toLowerCase().includes(query.toLowerCase()))
 
   const openStudent = roster.find((s) => s.id === openId)
   const open = openStudent ? studentOverview(state, openStudent) : null
@@ -155,7 +158,9 @@ function StudentDetailSheet({
   overview: StudentOverview | null
   onClose: () => void
 }) {
-  const { state } = useApp()
+  const { state, currentTeacher } = useApp()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const { name, initials } = useStudentNaming()
   if (!overview) return null
   const { student } = overview
   const journals = state.journals
@@ -167,7 +172,7 @@ function StudentDetailSheet({
     <Sheet
       open
       onClose={onClose}
-      title={student.name}
+      title={name(student.name)}
       description={`${MAJORS[student.major].fullName} · Kelas ${student.grade}`}
       footer={
         <Button block variant="secondary" icon="close" onClick={onClose}>
@@ -177,7 +182,20 @@ function StudentDetailSheet({
     >
       <div className="flex flex-col gap-5">
         <div className="flex items-center gap-3">
-          <Avatar name={student.name} initials={student.initials} size="lg" />
+          {prefs.showAvatars ? (
+            <Avatar
+              name={name(student.name)}
+              initials={initials(student.initials)}
+              size="lg"
+            />
+          ) : (
+            <span
+              aria-hidden="true"
+              className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-lg font-bold text-fg-muted"
+            >
+              {initials(student.initials)}
+            </span>
+          )}
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap gap-1.5">
               <Chip tone="accent">{MAJORS[student.major].name}</Chip>

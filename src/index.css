@@ -422,3 +422,135 @@ html.cb-monokrom {
   --danger-tint: color-mix(in oklab, var(--danger) 14%, var(--surface));
   --info-tint: color-mix(in oklab, var(--info) 16%, var(--surface));
 }
+
+/* ---------------------------------------------------------------------------
+   Accessibility extras — applied on <html> as .<class>.
+   Kept unlayered on purpose: unlayered rules outrank every cascade layer,
+   so these overrides win over Tailwind's `theme` layer (which owns
+   --font-weight-* and --text-*--line-height) without a !important fight.
+
+   Classes:
+     .contrast-tinggi         high-contrast token set (light + dark variants)
+     .mode-baca               Atkinson Hyperlegible + relaxed tracking
+     .spasi-lega              roomier line-height across the type scale
+     .teks-tebal              heavier font weights
+     .garis-bawah-tautan      always-underlined links
+     .kurangi-transparansi    no backdrop blur / glass surfaces
+--------------------------------------------------------------------------- */
+
+html.contrast-tinggi {
+  --bg: #f2f8fa;
+  --surface: #ffffff;
+  --surface-2: #e6f0f3;
+  --surface-3: #d2e3e8;
+  --border: #738d95;
+  --border-strong: #4e666e;
+
+  --fg: #0b1417;
+  --fg-muted: #2c3f45;
+  --fg-subtle: #40555c;
+  --fg-on-accent: #ffffff;
+
+  --accent: #1a5f88;
+  --accent-hover: #14496b;
+  --accent-strong: #0f3f5c;
+  --accent-tint: #d3e8f4;
+  --accent-border: rgba(15, 63, 92, 0.5);
+
+  --success: #16603a;
+  --warning: #7a5409;
+  --danger: #8a2b38;
+  --info: #165a68;
+  --success-tint: #d8f0e0;
+  --warning-tint: #f6ead0;
+  --danger-tint: #f7dee1;
+  --info-tint: #d8eef2;
+}
+
+html.dark.contrast-tinggi {
+  --bg: #05090b;
+  --surface: #0f1c22;
+  --surface-2: #16272e;
+  --surface-3: #1e333b;
+  --border: #6d8b95;
+  --border-strong: #9ab5bf;
+
+  --fg: #ffffff;
+  --fg-muted: #d7e6ea;
+  --fg-subtle: #b3c8ce;
+  --fg-on-accent: #061f2c;
+
+  --accent: #7ec8e8;
+  --accent-hover: #a2d9f2;
+  --accent-strong: #a8ddf5;
+  --accent-tint: #0d2a38;
+  --accent-border: rgba(168, 221, 245, 0.55);
+
+  --success: #7fd8a0;
+  --warning: #f0c777;
+  --danger: #ffa8b4;
+  --info: #a5e2f2;
+  --success-tint: #102c1c;
+  --warning-tint: #322713;
+  --danger-tint: #331a1f;
+  --info-tint: #0e2b33;
+}
+
+html.contrast-tinggi .ambient-bg {
+  background-image: none;
+}
+
+html.mode-baca body {
+  font-family: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.012em;
+  word-spacing: 0.08em;
+}
+
+html.mode-baca h1,
+html.mode-baca h2,
+html.mode-baca h3,
+html.mode-baca h4 {
+  letter-spacing: -0.01em;
+}
+
+html.spasi-lega {
+  --text-xs--line-height: 1.7;
+  --text-sm--line-height: 1.7;
+  --text-base--line-height: 1.75;
+  --text-lg--line-height: 1.65;
+  --text-xl--line-height: 1.55;
+  --text-2xl--line-height: 1.45;
+  --text-3xl--line-height: 1.35;
+  --text-4xl--line-height: 1.25;
+  --text-5xl--line-height: 1.2;
+  --text-6xl--line-height: 1.15;
+  --text-7xl--line-height: 1.1;
+  --text-8xl--line-height: 1.1;
+  --text-9xl--line-height: 1.1;
+}
+
+html.spasi-lega body {
+  line-height: 1.7;
+}
+
+html.teks-tebal {
+  --font-weight-normal: 500;
+  --font-weight-medium: 600;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+  --font-weight-extrabold: 900;
+}
+
+html.garis-bawah-tautan a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+html.kurangi-transparansi *,
+html.kurangi-transparansi *::before,
+html.kurangi-transparansi *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+

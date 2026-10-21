@@ -116,6 +116,7 @@ Semua rute berada di dalam layout `TeacherShell`.
 | `/guru/alert` | `RiskAlertsScreen` | Alert risiko & transkrip |
 | `/guru/murid` | `StudentsScreen` | Manajemen murid + filter |
 | `/guru/pkl` | `PklMonitoringScreen` | Monitoring murid PKL |
+| `/guru/pengaturan` | `TeacherSettingsScreen` | Tampilan, aksesibilitas, notifikasi, privasi data murid |
 | `*` | — | Dialihkan ke `/guru` |
 
 ## 6. Catatan Persistensi
@@ -125,4 +126,9 @@ Semua rute berada di dalam layout `TeacherShell`.
 - Untuk kembali ke layar login: gunakan **Logout** (set `role = null`), bukan
   sekadar mengubah URL.
 - Untuk memuat ulang data seed: **Reset demo** di `/profil` atau hapus kunci
-  `ruang-tumbuh:state:v1` di localStorage. Tema disimpan di `ruang-tumbuh:theme`.
+  `ruang-tumbuh:state:v1` di localStorage.
+- Kunci preferensi terpisah dari state: `ruang-tumbuh:theme` (tema),
+  `ruang-tumbuh:settings:v1` (tampilan & aksesibilitas, per perangkat),
+  `ruang-tumbuh:teacher-settings:v1` (preferensi guru, per `teacherId`), dan
+  `ruang-tumbuh:tour:v1` (status tur).
+- "Reset demo" juga mengembalikan seluruh preferensi ke bawaan.

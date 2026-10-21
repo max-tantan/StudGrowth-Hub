@@ -11,10 +11,12 @@ import { PageHeader } from '../../../components/teacher/PageHeader'
 import { StatTile } from '../../../components/teacher/StatTile'
 import { FilterPills } from '../../../components/teacher/FilterPills'
 import { useApp } from '../../../store/AppContext'
-import { allRiskAlerts, rosterForTeacher, studentOverview } from '../../../lib/teacher'
+import { allRiskAlerts, recentPklUpdates, rosterForTeacher, studentOverview } from '../../../lib/teacher'
 import type { StudentOverview } from '../../../lib/teacher'
 import { MAJORS } from '../../../config/majors'
 import { MOOD_MAP, relativeLabel } from '../../../lib/format'
+import { useTeacherPrefs } from '../../../lib/teacherSettings'
+import { useStudentNaming } from '../../../components/teacher/useStudentNaming'
 
 type PklFilter = PklStatus | 'ALL'
 
@@ -23,6 +25,8 @@ export function PklMonitoringScreen() {
   const roster = rosterForTeacher(state, currentTeacher)
   const alerts = allRiskAlerts(state, roster)
   const pklAlerts = alerts.filter((a) => a.flag.category.startsWith('pkl-'))
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const pklUpdates = recentPklUpdates(state, roster)
 
   const [filter, setFilter] = useState<PklFilter>('ALL')
 
@@ -43,6 +47,13 @@ export function PklMonitoringScreen() {
         eyebrow="Pembimbing PKL"
         title="Monitoring PKL"
         description="Pantau murid yang sedang menjalani PKL, penempatan industri, catatan harian, dan sinyal risiko terkait."
+        actions={
+          prefs.notifyPklUpdate && pklUpdates > 0 ? (
+            <Chip tone="warning" icon="journal">
+              {pklUpdates} catatan baru
+            </Chip>
+          ) : null
+        }
       />
 
       <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
@@ -103,7 +114,9 @@ export function PklMonitoringScreen() {
 }
 
 function PklCard({ overview }: { overview: StudentOverview }) {
-  const { state } = useApp()
+  const { state, currentTeacher } = useApp()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const { name, initials } = useStudentNaming()
   const [open, setOpen] = useState(false)
   const { student } = overview
 
@@ -119,9 +132,24 @@ function PklCard({ overview }: { overview: StudentOverview }) {
       <div className="rounded-[24px] bg-surface-2/70 p-1.5 ring-1 ring-border transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5">
         <div className="flex h-full flex-col rounded-[18px] bg-surface p-4 shadow-[var(--shadow-sm)]">
           <div className="flex items-start gap-3">
-            <Avatar name={student.name} initials={student.initials} size="md" />
+            {prefs.showAvatars ? (
+              <Avatar
+                name={name(student.name)}
+                initials={initials(student.initials)}
+                size="md"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-sm font-bold text-fg-muted"
+              >
+                {initials(student.initials)}
+              </span>
+            )}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-bold text-fg">{student.name}</p>
+              <p className="truncate text-sm font-bold text-fg">
+                {name(student.name)}
+              </p>
               <p className="truncate text-[12px] text-fg-subtle">
                 {MAJORS[student.major].name} · Kelas {student.grade}
               </p>
@@ -206,6 +234,7 @@ function PklDetailSheet({
   onClose: () => void
 }) {
   const { state } = useApp()
+  const { name } = useStudentNaming()
   const { student } = overview
   const pklJournals = state.journals
     .filter((j) => j.studentId === student.id && j.pkl)
@@ -218,7 +247,7 @@ function PklDetailSheet({
     <Sheet
       open={open}
       onClose={onClose}
-      title={student.name}
+      title={name(student.name)}
       description={student.pklPlacement ?? 'Penempatan belum diisi'}
       footer={
         <Button block variant="secondary" icon="close" onClick={onClose}>

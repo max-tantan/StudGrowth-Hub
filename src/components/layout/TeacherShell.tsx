@@ -3,7 +3,8 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Icon } from '../ui/Icon'
 import { IconButton } from '../ui/Button'
 import { useApp } from '../../store/AppContext'
-import { rosterForTeacher, teacherStats } from '../../lib/teacher'
+import { recentPklUpdates, rosterForTeacher, teacherStats } from '../../lib/teacher'
+import { useTeacherPrefs } from '../../lib/teacherSettings'
 import { TeacherSidebar } from '../teacher/TeacherSidebar'
 import { TeacherTopBar } from '../teacher/TeacherTopBar'
 import { TeacherCommandPalette } from '../teacher/TeacherCommandPalette'
@@ -23,6 +24,8 @@ export function TeacherShell() {
   const { pathname } = useLocation()
   const students = rosterForTeacher(state, currentTeacher)
   const stats = teacherStats(state, students)
+  const pklUpdates = recentPklUpdates(state, students)
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
   const [paletteOpen, setPaletteOpen] = useState(false)
 
   const openPalette = useCallback(() => setPaletteOpen(true), [])
@@ -47,7 +50,11 @@ export function TeacherShell() {
   return (
     <div className="ambient-bg min-h-dvh w-full bg-bg">
       <div className="mx-auto flex min-h-dvh w-full max-w-[1440px]">
-        <TeacherSidebar reviewCount={stats.pendingReview} alertCount={stats.activeAlerts} />
+        <TeacherSidebar
+          reviewCount={stats.pendingReview}
+          alertCount={stats.activeAlerts}
+          pklCount={pklUpdates}
+        />
 
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-bg/85 px-4 pt-[env(safe-area-inset-top)] backdrop-blur-md lg:hidden">
@@ -63,14 +70,17 @@ export function TeacherShell() {
               tone="ghost"
               onClick={start}
             />
-            {stats.activeAlerts > 0 && (
-              <NavLink to="/guru/alert" className="relative">
-                <IconButton name="bell" label="Alert risiko" tone="ghost" />
+            <NavLink to="/guru/alert" className="relative">
+              <IconButton name="bell" label="Alert risiko" tone="ghost" />
+              {prefs.notifyNewAlert && stats.activeAlerts > 0 && (
                 <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-bold text-white">
                   {stats.activeAlerts}
                 </span>
-              </NavLink>
-            )}
+              )}
+            </NavLink>
+            <NavLink to="/guru/pengaturan">
+              <IconButton name="gear" label="Pengaturan" tone="ghost" />
+            </NavLink>
             <IconButton name="signOut" label="Keluar" tone="ghost" onClick={logout} />
           </header>
 

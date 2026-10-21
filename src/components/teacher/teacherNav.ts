@@ -9,7 +9,7 @@ export interface TeacherNavItem {
   hint?: string
   icon: IconName
   end?: boolean
-  badgeKey?: 'review' | 'alert'
+  badgeKey?: 'review' | 'alert' | 'pkl'
   tour?: string
   group: TeacherNavGroup
 }
@@ -58,6 +58,7 @@ export const TEACHER_NAV: TeacherNavItem[] = [
     shortLabel: 'PKL',
     hint: 'Penempatan dan catatan harian PKL',
     icon: 'briefcase',
+    badgeKey: 'pkl',
     tour: 'teacher-pkl',
     group: 'Data Murid',
   },

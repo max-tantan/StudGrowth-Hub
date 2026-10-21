@@ -57,8 +57,10 @@ src/
     │   ├── storage.ts      #   Persistensi localStorage
     │   ├── tour.ts         #   Status tur guide per role (localStorage)
     │   ├── format.ts       #   Format tanggal, mood, greeting, clamp
-│   ├── theme.ts        #   Light/dark/system
-│   └── cn.ts           #   Penggabung className (clsx)
+    │   ├── settings.ts     #   Preferensi tampilan & aksesibilitas (per perangkat)
+    │   ├── theme.ts        #   Light/dark/system
+    │   ├── teacherSettings.ts # Preferensi tampilan guru (per teacherId)
+    │   └── cn.ts           #   Penggabung className (clsx)
 ├── store/              # State global
 │   ├── appState.ts     #   AppState, reducer, selector `derive()`
 │   ├── AppContext.ts   #   Context + hook `useApp()`
@@ -70,7 +72,7 @@ src/
 ├── screens/            # Halaman (per domain/role)
 │   ├── auth/           #   LoginScreen
 │   ├── student/        #   Home, Journal, Consult, Progress, Resume, Pkl, Profile, Onboarding
-│   └── teacher/        #   Dashboard, ReviewResume, RiskAlerts, Students, Pkl
+│   └── teacher/        #   Dashboard, ReviewResume, RiskAlerts, Students, Pkl, Settings
 └── components/         # Komponen yang dapat dipakai ulang
     ├── ui/             #   Primitif desain (Button, Card, Chip, Field, Sheet, …)
     ├── layout/         #   AppShell, TeacherShell, Sidebar, TabBar, TopBar, Splash
@@ -79,6 +81,7 @@ src/
     ├── journal/        #   JournalCard, MoodPicker, DimensionTagPicker
     ├── progress/       #   BadgeGrid, TargetSection
     ├── resume/           #   WeekTimeline, WeekDetailBody
+    ├── settings/         #   Bagian pengaturan (DisplaySection, AccessibilitySection, …)
     ├── teacher/          #   TeacherSidebar, StatTile, StudentRow, RiskAlertCard, …
     └── tour/             #   TourProvider, Spotlight, TourCard, useTargetRect
 ```
@@ -202,12 +205,17 @@ sebagai pesan AI dengan opsi `risk` bila terdeteksi.
 
 - **Kunci state:** `ruang-tumbuh:state:v1`
 - **Kunci tema:** `ruang-tumbuh:theme`
+- **Kunci pengaturan (a11y/display):** `ruang-tumbuh:settings:v1`
+- **Kunci pengaturan guru:** `ruang-tumbuh:teacher-settings:v1` (peta per `teacherId`)
 
 Alur:
 
 1. Saat mount, `AppProvider` memanggil `loadState()` lalu `dispatch(HYDRATE)`.
 2. Setiap perubahan state setelah `hydrated`, `saveState(state)` dipanggil.
 3. `RESET` memanggil `clearState()` dan mengembalikan state awal.
+
+`resetDemo()` (aksi "Reset data demo") juga mengembalikan **preferensi** ke
+bawaan: `resetSettings()`, `resetTheme()`, dan `resetAllTeacherPrefs()`.
 
 Untuk **kompatibilitas ke belakang**, `loadState()` mengisi nilai default yang
 hilang — mis. `role` lama yang belum tersimpan dianggap `'student'`. Bidang
@@ -222,10 +230,34 @@ dipanggil di `main.tsx` sebelum render. Mode gelap diterapkan dengan menambahkan
 kelas `dark` pada `<html>`; token warna berganti otomatis lewat CSS variables
 (lihat [`design-system.md`](design-system.md)).
 
-## 9. Batasan
+## 9. Preferensi & aksesibilitas
+
+Tiga store terpisah, semuanya berbasis `useSyncExternalStore` agar perubahan
+langsung terasa di seluruh aplikasi:
+
+| Store | Berkas | Cakupan | Dipakai oleh |
+| --- | --- | --- | --- |
+| `SettingsState` | `src/lib/settings.ts` | Per perangkat | Murid & guru (tema, skala teks, buta warna, a11y) |
+| `ThemePreference` | `src/lib/theme.ts` | Per perangkat | Murid & guru |
+| `TeacherPrefs` | `src/lib/teacherSettings.ts` | Per `teacherId` | Layar guru saja |
+
+`applySettings()` menoggle kelas pada `<html>` (`contrast-tinggi`, `mode-baca`,
+`spasi-lega`, `teks-tebal`, `garis-bawah-tautan`, `kurangi-transparansi`).
+Aturan CSS-nya ada di blok **unlayered** `src/index.css` agar menimpa layer
+`@theme` Tailwind (lihat [`design-system.md`](design-system.md) §8).
+
+Preferensi guru dibaca lewat `useTeacherPrefs(teacherId)`; efek samping tampilan
+(anonimasi nama, kerapatan tabel, avatar, lencana notifikasi) diterapkan di
+layar dan komponen guru melalui `useStudentNaming()`.
+
+## 10. Batasan
 
 - **Tanpa backend**: semua data mock, tidak ada sinkronisasi multi-perangkat.
 - **Generator AI rule-based** (kata kunci + template), bukan model bahasa.
 - **Export PDF resume** masih berupa mock.
 - Deteksi risiko berbasis kata kunci, sehingga bisa salah deteksi; sifatnya
   sebagai alat bantu, bukan penentu tunggal.
+- Preferensi aksesibilitas tersimpan per perangkat (localStorage), tidak
+  tersinkron antar akun maupun perangkat.
+- "Mode anonim" hanya menutupi nama di tampilan peramban; data asli tetap ada
+  di penyimpanan lokal.

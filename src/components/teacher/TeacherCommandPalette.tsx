@@ -9,12 +9,14 @@ import { useTour } from '../tour/TourContext'
 import { TEACHER_NAV } from './teacherNav'
 import { MAJORS } from '../../config/majors'
 import type { IconName } from '../ui/icons'
+import { useStudentNaming } from './useStudentNaming'
 
 export function TeacherCommandPalette({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate()
   const { state, currentTeacher } = useApp()
   const { start } = useTour()
   const roster = rosterForTeacher(state, currentTeacher)
+  const { name } = useStudentNaming()
 
   const getGroups = useCallback(
     (query: string): CommandGroup[] => {
@@ -73,6 +75,16 @@ export function TeacherCommandPalette({ onClose }: { onClose: () => void }) {
           },
         },
         {
+          id: 'teacher-settings',
+          label: 'Pengaturan guru',
+          hint: 'Tampilan, aksesibilitas, notifikasi, privasi',
+          icon: 'gear' as IconName,
+          run: () => {
+            navigate('/guru/pengaturan')
+            onClose()
+          },
+        },
+        {
           id: 'teacher-guide',
           label: 'Buka panduan Ruang Guru',
           hint: 'Tur layar langkah demi langkah',
@@ -97,11 +109,11 @@ export function TeacherCommandPalette({ onClose }: { onClose: () => void }) {
       const students: CommandItem[] =
         q.length >= 2
           ? roster
-              .filter((s) => s.name.toLowerCase().includes(q))
+              .filter((s) => name(s.name).toLowerCase().includes(q))
               .slice(0, 6)
               .map((s) => ({
                 id: s.id,
-                label: s.name,
+                label: name(s.name),
                 hint: `${MAJORS[s.major].name} · Kelas ${s.grade}`,
                 icon: 'users3' as IconName,
                 run: () => {
@@ -123,7 +135,7 @@ export function TeacherCommandPalette({ onClose }: { onClose: () => void }) {
 
       return groups
     },
-    [navigate, onClose, roster, start],
+    [navigate, onClose, roster, start, name],
   )
 
   return (

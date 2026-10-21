@@ -174,6 +174,48 @@ dinonaktifkan mengikuti kebijakan gerak di atas.
 - Tur guide: dialog memakai `role="dialog"`, `aria-modal="true"`, focus
   dipindah ke kartu tiap langkah, focus di trap di dalam kartu, `Escape`
   menutup tur.
+- `Switch` memakai `<button role="switch">` + `<label htmlFor>`; `SegmentedControl`
+  memakai `role="radiogroup"`/`role="radio"` dengan roving tabindex dan navigasi
+  panah/Home/End.
+
+### 8.1 Preferensi aksesibilitas (Pengaturan → Aksesibilitas)
+
+Disimpan di `SettingsState` (`src/lib/settings.ts`) dan berlaku **per perangkat**
+(shared untuk murid & guru). `applySettings()` menoggle kelas pada
+`<html>`; aturan CSS-nya ada di blok unlayered di `src/index.css` (harus
+unlayered agar menimpa layer `@theme` Tailwind).
+
+| Preferensi | Field | Kelas `<html>` | Efek |
+| --- | --- | --- | --- |
+| Kontras | `contrast` | `contrast-tinggi` | Set token light/dark dengan rasio teks ≥ 4.5:1 (AA) dan border ≥ 3:1 |
+| Spasi baris | `lineSpacing` | `spasi-lega` | Override `--text-*--line-height` + `body { line-height: 1.7 }` |
+| Mode baca | `readingMode` | `mode-baca` | Atkinson Hyperlegible (bawaan) + `letter-spacing`/`word-spacing` longgar |
+| Teks tebal | `boldText` | `teks-tebal` | Override `--font-weight-*` (normal→500 … extrabold→900) |
+| Garis bawah tautan | `underlineLinks` | `garis-bawah-tautan` | Semua `a` digarisbawahi |
+| Kurangi transparansi | `reduceTransparency` | `kurangi-transparansi` | Matikan `backdrop-filter` pada permukaan kaca |
+
+Tombol **"Atur ulang preferensi aksesibilitas"** memanggil
+`resetAccessibilitySettings()` — hanya menyentuh 6 field di atas, tidak
+mengubah tema, modus buta warna, skala teks, atau animasi.
+
+### 8.2 Preferensi tampilan guru (Pengaturan Guru)
+
+Disimpan di `src/lib/teacherSettings.ts` dengan key
+`ruang-tumbuh:teacher-settings:v1`, **per `teacherId`**.
+
+| Preferensi | Field | Efek |
+| --- | --- | --- |
+| Notifikasi alert baru | `notifyNewAlert` | Badge lonceng di top bar & header mobile |
+| Notifikasi review mingguan | `notifyWeeklyReview` | Chip ringkasan antrean |
+| Notifikasi pembaruan PKL | `notifyPklUpdate` | Lencana PKL di dasbor |
+| Mode anonim murid | `anonymizeStudents` | Nama → `S••• R••••` di seluruh layar guru |
+| Kerapatan tabel | `tableDensity` | `rapat` = padding/font metric lebih padat |
+| Tampilkan avatar | `showAvatars` | Ganti avatar lingkaran dengan badge inisial |
+
+Mode anonim memakai `useStudentNaming()` (`src/components/teacher/useStudentNaming.ts`),
+yang membungkus `maskStudentName`/`maskStudentInitials`. Pencarian murid juga
+memakai nama tampilan, sehingga di mode anonim guru tidak bisa mencari lewat
+nama asli.
 
 ## 9. Tur Guide (Panduan)
 

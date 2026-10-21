@@ -5,6 +5,9 @@ import { Button } from '../ui/Button'
 import { relativeLabel } from '../../lib/format'
 import { RISK_CATEGORY_LABEL } from '../../config/teacherRoles'
 import type { RiskAlert } from '../../lib/teacher'
+import { useApp } from '../../store/AppContext'
+import { useTeacherPrefs } from '../../lib/teacherSettings'
+import { useStudentNaming } from './useStudentNaming'
 
 interface RiskAlertCardProps {
   alert: RiskAlert
@@ -19,6 +22,9 @@ export function RiskAlertCard({
   onToggleResolved,
   onOpen,
 }: RiskAlertCardProps) {
+  const { currentTeacher } = useApp()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+  const { name, initials } = useStudentNaming()
   const high = alert.flag.severity === 'tinggi'
 
   return (
@@ -37,10 +43,25 @@ export function RiskAlertCard({
       />
       <div className="flex flex-col gap-3 pl-5 pr-4 py-4">
         <div className="flex items-start gap-3">
-          <Avatar name={alert.student.name} initials={alert.student.initials} size="sm" />
+          {prefs.showAvatars ? (
+            <Avatar
+              name={name(alert.student.name)}
+              initials={initials(alert.student.initials)}
+              size="sm"
+            />
+          ) : (
+            <span
+              aria-hidden="true"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-xs font-bold text-fg-muted"
+            >
+              {initials(alert.student.initials)}
+            </span>
+          )}
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <p className="text-sm font-bold text-fg">{alert.student.name}</p>
+              <p className="text-sm font-bold text-fg">
+                {name(alert.student.name)}
+              </p>
               <Chip tone={high ? 'danger' : 'warning'} icon="shieldWarning">
                 {high ? 'Prioritas tinggi' : 'Perlu dipantau'}
               </Chip>

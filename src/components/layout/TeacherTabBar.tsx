@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 import { Icon } from '../ui/Icon'
+import { useApp } from '../../store/AppContext'
+import { useTeacherPrefs } from '../../lib/teacherSettings'
 import { TEACHER_NAV } from '../teacher/teacherNav'
 
 export function TeacherTabBar({
@@ -10,6 +12,9 @@ export function TeacherTabBar({
   reviewCount: number
   alertCount: number
 }) {
+  const { currentTeacher } = useApp()
+  const { prefs } = useTeacherPrefs(currentTeacher.id)
+
   return (
     <nav
       aria-label="Navigasi guru"
@@ -19,9 +24,13 @@ export function TeacherTabBar({
         {TEACHER_NAV.map((item) => {
           const count =
             item.badgeKey === 'review'
-              ? reviewCount
+              ? prefs.notifyWeeklyReview
+                ? reviewCount
+                : 0
               : item.badgeKey === 'alert'
-                ? alertCount
+                ? prefs.notifyNewAlert
+                  ? alertCount
+                  : 0
                 : 0
           return (
             <li key={item.to} className="flex-1">

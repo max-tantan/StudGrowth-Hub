@@ -4,6 +4,9 @@ import type { ChatMessage } from '../types'
 import { generateAiReply } from '../lib/ai'
 import { clearState, loadState, saveState } from '../lib/storage'
 import { resetTourSeen } from '../lib/tour'
+import { resetSettings } from '../lib/settings'
+import { resetTheme } from '../lib/theme'
+import { resetAllTeacherPrefs } from '../lib/teacherSettings'
 import { AppContext } from './AppContext'
 import type { AppContextValue } from './AppContext'
 import {
@@ -110,6 +113,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       resetDemo: () => {
         clearState()
         resetTourSeen()
+        resetSettings()
+        resetTheme()
+        resetAllTeacherPrefs()
         dispatch({ type: 'RESET' })
       },
     }

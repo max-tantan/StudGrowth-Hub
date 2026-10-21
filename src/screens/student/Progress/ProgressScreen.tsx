@@ -61,6 +61,7 @@ export function ProgressScreen() {
         <Stagger className="flex flex-col gap-5 lg:col-span-7 lg:col-start-6 lg:row-start-1">
           <StaggerItem>
           <SegmentedControl<Tab>
+          label="Dimensi perkembangan"
           value={tab}
           onChange={setTab}
           options={[

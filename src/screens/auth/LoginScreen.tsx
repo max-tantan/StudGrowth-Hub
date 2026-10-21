@@ -90,6 +90,7 @@ export function LoginScreen() {
 
             <div className="mt-5">
               <SegmentedControl<Role>
+                label="Pilih peran"
                 value={role}
                 onChange={setRole}
                 options={[
