@@ -73,7 +73,7 @@ export function PklMonitoringScreen() {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
         <FilterPills<PklFilter>
           value={filter}
           onChange={setFilter}

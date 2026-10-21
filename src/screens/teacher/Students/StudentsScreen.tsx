@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import type { Grade, Major, PklStatus } from '../../../types'
 import { Card } from '../../../components/ui/Card'
 import { Chip } from '../../../components/ui/Chip'
@@ -12,7 +13,7 @@ import { MOOD_ICON } from '../../../components/ui/icons'
 import { PageHeader } from '../../../components/teacher/PageHeader'
 import { StatTile } from '../../../components/teacher/StatTile'
 import { FilterPills } from '../../../components/teacher/FilterPills'
-import { StudentRow } from '../../../components/teacher/StudentRow'
+import { StudentRow, StudentTableHead } from '../../../components/teacher/StudentRow'
 import { useApp } from '../../../store/AppContext'
 import {
   allRiskAlerts,
@@ -34,11 +35,13 @@ export function StudentsScreen() {
   const overviews = useMemo(() => overviewsFor(state, roster), [state, roster])
   const alerts = allRiskAlerts(state, roster)
 
+  const [params, setParams] = useSearchParams()
   const [major, setMajor] = useState<MajorFilter>('ALL')
   const [grade, setGrade] = useState<GradeFilter>('ALL')
   const [pkl, setPkl] = useState<PklFilter>('ALL')
   const [query, setQuery] = useState('')
-  const [openId, setOpenId] = useState<string | null>(null)
+
+  const openId = params.get('murid')
 
   const filtered = overviews
     .filter((o) => major === 'ALL' || o.student.major === major)
@@ -46,7 +49,12 @@ export function StudentsScreen() {
     .filter((o) => pkl === 'ALL' || o.student.pklStatus === pkl)
     .filter((o) => o.student.name.toLowerCase().includes(query.toLowerCase()))
 
-  const open = openId ? studentOverview(state, roster.find((s) => s.id === openId)!) : null
+  const openStudent = roster.find((s) => s.id === openId)
+  const open = openStudent ? studentOverview(state, openStudent) : null
+
+  const selectStudent = (id: string | null) => {
+    setParams(id ? { murid: id } : {}, { replace: true })
+  }
 
   return (
     <>
@@ -78,40 +86,42 @@ export function StudentsScreen() {
         />
       </div>
 
-      <div className="mb-4 flex flex-col gap-3">
-        <div className="sm:max-w-xs">
+      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="w-full lg:max-w-xs">
           <SearchInput value={query} onChange={setQuery} placeholder="Cari nama murid" />
         </div>
-        <FilterPills<MajorFilter>
-          value={major}
-          onChange={setMajor}
-          options={[
-            { value: 'ALL', label: 'Semua jurusan' },
-            { value: 'PERHOTELAN', label: 'Perhotelan' },
-            { value: 'AKUNTANSI', label: 'Akuntansi' },
-            { value: 'PPLG', label: 'PPLG' },
-          ]}
-        />
-        <FilterPills<GradeFilter>
-          value={grade}
-          onChange={setGrade}
-          options={[
-            { value: 'ALL', label: 'Semua kelas' },
-            { value: 'X', label: 'Kelas X' },
-            { value: 'XI', label: 'Kelas XI' },
-            { value: 'XII', label: 'Kelas XII' },
-          ]}
-        />
-        <FilterPills<PklFilter>
-          value={pkl}
-          onChange={setPkl}
-          options={[
-            { value: 'ALL', label: 'Semua PKL' },
-            { value: 'sedang', label: 'Sedang' },
-            { value: 'selesai', label: 'Selesai' },
-            { value: 'belum', label: 'Belum' },
-          ]}
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          <FilterPills<MajorFilter>
+            value={major}
+            onChange={setMajor}
+            options={[
+              { value: 'ALL', label: 'Semua jurusan' },
+              { value: 'PERHOTELAN', label: 'Perhotelan' },
+              { value: 'AKUNTANSI', label: 'Akuntansi' },
+              { value: 'PPLG', label: 'PPLG' },
+            ]}
+          />
+          <FilterPills<GradeFilter>
+            value={grade}
+            onChange={setGrade}
+            options={[
+              { value: 'ALL', label: 'Semua kelas' },
+              { value: 'X', label: 'Kelas X' },
+              { value: 'XI', label: 'Kelas XI' },
+              { value: 'XII', label: 'Kelas XII' },
+            ]}
+          />
+          <FilterPills<PklFilter>
+            value={pkl}
+            onChange={setPkl}
+            options={[
+              { value: 'ALL', label: 'Semua PKL' },
+              { value: 'sedang', label: 'Sedang' },
+              { value: 'selesai', label: 'Selesai' },
+              { value: 'belum', label: 'Belum' },
+            ]}
+          />
+        </div>
       </div>
 
       {filtered.length === 0 ? (
@@ -122,13 +132,18 @@ export function StudentsScreen() {
         />
       ) : (
         <Card padded={false} className="overflow-hidden">
+          <StudentTableHead />
           {filtered.map((o) => (
-            <StudentRow key={o.student.id} overview={o} onClick={() => setOpenId(o.student.id)} />
+            <StudentRow
+              key={o.student.id}
+              overview={o}
+              onClick={() => selectStudent(o.student.id)}
+            />
           ))}
         </Card>
       )}
 
-      <StudentDetailSheet overview={open} onClose={() => setOpenId(null)} />
+      <StudentDetailSheet overview={open} onClose={() => selectStudent(null)} />
     </>
   )
 }

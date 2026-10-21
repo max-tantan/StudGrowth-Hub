@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import type { ReactNode } from 'react'
 import { cn } from '../../lib/cn'
+import { useIsDesktop } from '../../lib/media'
 import { SPRING_SETTLE } from '../motion/transitions'
 import { IconButton } from './Button'
 
@@ -25,6 +26,8 @@ export function Sheet({
   footer,
   className,
 }: SheetProps) {
+  const desktop = useIsDesktop()
+
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
@@ -42,7 +45,7 @@ export function Sheet({
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 z-50 flex items-end justify-center lg:items-center lg:p-6">
           <motion.button
             aria-label="Tutup"
             onClick={onClose}
@@ -56,13 +59,14 @@ export function Sheet({
             role="dialog"
             aria-modal="true"
             aria-label={title}
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={desktop ? { opacity: 0, y: 10, scale: 0.97 } : { y: '100%' }}
+            animate={desktop ? { opacity: 1, y: 0, scale: 1 } : { y: 0 }}
+            exit={desktop ? { opacity: 0, y: 6, scale: 0.98 } : { y: '100%' }}
             transition={SPRING_SETTLE}
             className={cn(
               'relative z-10 w-full max-w-[560px] rounded-t-[26px] border border-border bg-surface shadow-[var(--shadow-lg)]',
               'max-h-[88dvh] overflow-y-auto pb-[max(1rem,env(safe-area-inset-bottom))]',
+              'lg:rounded-[26px] lg:max-h-[84dvh] lg:pb-0',
               className,
             )}
           >

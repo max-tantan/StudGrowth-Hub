@@ -37,11 +37,11 @@ export function StatTile({
   return (
     <div
       className={cn(
-        'rounded-[24px] bg-surface-2/70 p-1.5 ring-1 ring-border transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5',
+        'flex h-full flex-col rounded-[24px] bg-surface-2/70 p-1.5 ring-1 ring-border transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5',
         className,
       )}
     >
-      <div className="flex h-full flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-[var(--shadow-sm)]">
+      <div className="flex flex-1 flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-[var(--shadow-sm)]">
         <div className="flex items-center justify-between">
           <span
             className={cn(

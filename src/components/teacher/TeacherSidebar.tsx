@@ -9,7 +9,7 @@ import { useApp } from '../../store/AppContext'
 import { TEACHER_ROLE_META } from '../../config/teacherRoles'
 import { isDarkNow, setThemePreference } from '../../lib/theme'
 import { useTour } from '../tour/TourContext'
-import { TEACHER_NAV } from './teacherNav'
+import { TEACHER_NAV, TEACHER_NAV_GROUPS } from './teacherNav'
 
 interface TeacherSidebarProps {
   reviewCount?: number
@@ -57,50 +57,76 @@ export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSideb
         </div>
       </div>
 
-      <nav aria-label="Navigasi guru" className="mt-5 flex flex-col gap-0.5 px-2.5">
-        {TEACHER_NAV.map((item) => {
-          const count = item.badgeKey === 'review' ? reviewCount : item.badgeKey === 'alert' ? alertCount : 0
+      <nav aria-label="Navigasi guru" className="mt-5 flex flex-col px-2.5">
+        {TEACHER_NAV_GROUPS.map((group) => {
+          const items = TEACHER_NAV.filter((n) => n.group === group)
+          if (items.length === 0) return null
           return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              data-tour={item.tour}
-              className={({ isActive }) =>
-                cn(
-                  'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors duration-200',
-                  isActive
-                    ? 'bg-accent-tint text-accent-strong'
-                    : 'text-fg-muted hover:bg-surface-2 hover:text-fg',
-                )
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon name={item.icon} size={20} weight={isActive ? 'fill' : 'duotone'} />
-                  <span className="flex-1">{item.label}</span>
-                  {count > 0 && (
-                    <span
-                      className={cn(
-                        'flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold',
-                        item.badgeKey === 'alert'
-                          ? 'bg-danger-tint text-danger'
-                          : 'bg-accent text-fg-on-accent',
-                      )}
+            <div key={group} className="mb-1">
+              <p className="px-3 pb-1.5 pt-3 text-[10.5px] font-bold uppercase tracking-[0.14em] text-fg-subtle">
+                {group}
+              </p>
+              <div className="flex flex-col gap-0.5">
+                {items.map((item) => {
+                  const count =
+                    item.badgeKey === 'review'
+                      ? reviewCount
+                      : item.badgeKey === 'alert'
+                        ? alertCount
+                        : 0
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.end}
+                      data-tour={item.tour}
+                      title={item.hint}
+                      className={({ isActive }) =>
+                        cn(
+                          'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors duration-200',
+                          isActive
+                            ? 'bg-accent-tint text-accent-strong'
+                            : 'text-fg-muted hover:bg-surface-2 hover:text-fg',
+                        )
+                      }
                     >
-                      {count}
-                    </span>
-                  )}
-                </>
-              )}
-            </NavLink>
+                      {({ isActive }) => (
+                        <>
+                          {isActive && (
+                            <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-accent" />
+                          )}
+                          <Icon
+                            name={item.icon}
+                            size={20}
+                            weight={isActive ? 'fill' : 'duotone'}
+                          />
+                          <span className="flex-1 truncate">{item.label}</span>
+                          {count > 0 && (
+                            <span
+                              className={cn(
+                                'flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold',
+                                item.badgeKey === 'alert'
+                                  ? 'bg-danger-tint text-danger'
+                                  : 'bg-accent text-fg-on-accent',
+                              )}
+                            >
+                              {count}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </NavLink>
+                  )
+                })}
+              </div>
+            </div>
           )
         })}
       </nav>
 
       <div className="mt-auto border-t border-border px-4 py-3.5">
         <div className="mb-2 flex items-center gap-1.5 rounded-xl border border-border bg-surface-2/50 px-3 py-2">
-          <Icon name="shieldCheck" size={16} weight="duotone" className="text-info" />
+          <Icon name="shieldCheck" size={16} weight="duotone" className="shrink-0 text-info" />
           <p className="text-[11px] leading-tight text-fg-subtle">
             Data murid bersifat rahasia. Gunakan sesuai kode etik.
           </p>

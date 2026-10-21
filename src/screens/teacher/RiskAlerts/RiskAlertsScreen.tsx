@@ -73,7 +73,7 @@ export function RiskAlertsScreen() {
         />
       </div>
 
-      <div className="mb-4 flex flex-col gap-3">
+      <div className="mb-4 flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:gap-3">
         <FilterPills<Severity>
           value={severity}
           onChange={setSeverity}
@@ -102,7 +102,7 @@ export function RiskAlertsScreen() {
           description="Belum ada sinyal risiko dari konsultasi murid pada filter ini."
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="grid gap-3 xl:grid-cols-2">
           {filtered.map((a) => (
             <RiskAlertCard
               key={a.id}

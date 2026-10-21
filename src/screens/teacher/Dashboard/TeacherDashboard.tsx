@@ -61,39 +61,64 @@ export function TeacherDashboard() {
         }
       />
 
+      <div className="mb-5 hidden items-center gap-2 lg:flex">
+        <span className="mr-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-fg-subtle">
+          Aksi cepat
+        </span>
+        <Link to="/guru/review">
+          <Button size="sm" icon="clipboard">
+            Tinjau antrean ({stats.pendingReview})
+          </Button>
+        </Link>
+        <Link to="/guru/alert">
+          <Button size="sm" variant="secondary" icon="shieldWarning">
+            Lihat alert ({stats.activeAlerts})
+          </Button>
+        </Link>
+        <Link to="/guru/murid">
+          <Button size="sm" variant="ghost" icon="users3">
+            Kelola murid
+          </Button>
+        </Link>
+      </div>
+
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-12 lg:gap-4">
-        <StatTile
-          className="lg:col-span-3"
-          icon="users3"
-          tone="accent"
-          label="Murid binaan"
-          value={stats.totalStudents}
-          hint="Dalam lingkupmu"
-        />
-        <StatTile
-          className="lg:col-span-3"
-          icon="clipboard"
-          tone="info"
-          label="Menunggu review"
-          value={stats.pendingReview}
-          hint="Resume minggu ini"
-        />
-        <StatTile
-          className="lg:col-span-3"
-          icon="shieldWarning"
-          tone={stats.activeAlerts ? 'danger' : 'success'}
-          label="Alert risiko"
-          value={stats.activeAlerts}
-          hint={stats.highAlerts ? `${stats.highAlerts} prioritas tinggi` : 'Semua aman'}
-        />
-        <StatTile
-          className="lg:col-span-3"
-          icon="briefcase"
-          tone="warning"
-          label="PKL berjalan"
-          value={stats.pklOngoing}
-          hint="Sedang di industri"
-        />
+        <Link to="/guru/murid" className="col-span-1 lg:col-span-3">
+          <StatTile
+            icon="users3"
+            tone="accent"
+            label="Murid binaan"
+            value={stats.totalStudents}
+            hint="Dalam lingkupmu"
+          />
+        </Link>
+        <Link to="/guru/review" className="col-span-1 lg:col-span-3">
+          <StatTile
+            icon="clipboard"
+            tone="info"
+            label="Menunggu review"
+            value={stats.pendingReview}
+            hint="Resume minggu ini"
+          />
+        </Link>
+        <Link to="/guru/alert" className="col-span-1 lg:col-span-3">
+          <StatTile
+            icon="shieldWarning"
+            tone={stats.activeAlerts ? 'danger' : 'success'}
+            label="Alert risiko"
+            value={stats.activeAlerts}
+            hint={stats.highAlerts ? `${stats.highAlerts} prioritas tinggi` : 'Semua aman'}
+          />
+        </Link>
+        <Link to="/guru/pkl" className="col-span-1 lg:col-span-3">
+          <StatTile
+            icon="briefcase"
+            tone="warning"
+            label="PKL berjalan"
+            value={stats.pklOngoing}
+            hint="Sedang di industri"
+          />
+        </Link>
 
         {/* Review queue */}
         <Card

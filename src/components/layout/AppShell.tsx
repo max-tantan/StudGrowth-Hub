@@ -4,7 +4,7 @@ import { PhoneFrame } from './PhoneFrame'
 import { Sidebar } from './Sidebar'
 import { TabBar } from './TabBar'
 import { StatusBar } from './StatusBar'
-import { CommandPalette } from './CommandPalette'
+import { StudentCommandPalette } from './StudentCommandPalette'
 import { PageTransition } from '../motion/PageTransition'
 
 const TAB_ROOTS = new Set([
@@ -79,7 +79,7 @@ export function AppShell() {
         </div>
       </div>
       {showTabs && <TabBar />}
-      {paletteOpen && <CommandPalette open={paletteOpen} onClose={closePalette} />}
+      {paletteOpen && <StudentCommandPalette onClose={closePalette} />}
     </PhoneFrame>
   )
 }

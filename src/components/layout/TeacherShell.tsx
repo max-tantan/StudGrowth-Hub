@@ -1,17 +1,48 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { useCallback, useEffect, useState } from 'react'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Icon } from '../ui/Icon'
 import { IconButton } from '../ui/Button'
 import { useApp } from '../../store/AppContext'
 import { rosterForTeacher, teacherStats } from '../../lib/teacher'
 import { TeacherSidebar } from '../teacher/TeacherSidebar'
+import { TeacherTopBar } from '../teacher/TeacherTopBar'
+import { TeacherCommandPalette } from '../teacher/TeacherCommandPalette'
 import { TeacherTabBar } from './TeacherTabBar'
+import { PageTransition } from '../motion/PageTransition'
 import { useTour } from '../tour/TourContext'
+
+function isEditing(e: EventTarget | null) {
+  if (!e || !(e instanceof HTMLElement)) return false
+  const tag = e.tagName.toLowerCase()
+  return tag === 'input' || tag === 'textarea' || e.isContentEditable
+}
 
 export function TeacherShell() {
   const { state, currentTeacher, logout } = useApp()
   const { start } = useTour()
+  const { pathname } = useLocation()
   const students = rosterForTeacher(state, currentTeacher)
   const stats = teacherStats(state, students)
+  const [paletteOpen, setPaletteOpen] = useState(false)
+
+  const openPalette = useCallback(() => setPaletteOpen(true), [])
+  const closePalette = useCallback(() => setPaletteOpen(false), [])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (isEditing(e.target)) return
+      const meta = e.metaKey || e.ctrlKey
+      if (meta && e.key === 'k') {
+        e.preventDefault()
+        setPaletteOpen((v) => !v)
+        return
+      }
+      if (e.key === 'Escape') setPaletteOpen(false)
+    }
+
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <div className="ambient-bg min-h-dvh w-full bg-bg">
@@ -43,8 +74,15 @@ export function TeacherShell() {
             <IconButton name="signOut" label="Keluar" tone="ghost" onClick={logout} />
           </header>
 
+          <TeacherTopBar
+            onOpenPalette={openPalette}
+            alertCount={stats.activeAlerts}
+          />
+
           <main className="flex-1 px-4 pb-20 pt-5 sm:px-6 lg:px-10 lg:pb-16 lg:pt-8">
-            <Outlet />
+            <PageTransition routeKey={pathname}>
+              <Outlet />
+            </PageTransition>
           </main>
         </div>
       </div>
@@ -53,6 +91,8 @@ export function TeacherShell() {
         reviewCount={stats.pendingReview}
         alertCount={stats.activeAlerts}
       />
+
+      {paletteOpen && <TeacherCommandPalette onClose={closePalette} />}
     </div>
   )
 }
