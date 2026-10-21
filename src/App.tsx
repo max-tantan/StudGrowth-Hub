@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import { AppProvider } from './store/AppProvider'
 import { MotionProvider } from './components/motion/MotionProvider'
+import { TourProvider } from './components/tour/TourProvider'
 import { useApp } from './store/AppContext'
 import { Splash } from './components/layout/Splash'
 import { AuthRoutes } from './routes/AuthRoutes'
@@ -21,7 +22,9 @@ export default function App() {
     <AppProvider>
       <MotionProvider>
         <BrowserRouter>
-          <AppRoutes />
+          <TourProvider>
+            <AppRoutes />
+          </TourProvider>
         </BrowserRouter>
       </MotionProvider>
     </AppProvider>

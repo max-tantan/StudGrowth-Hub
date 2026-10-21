@@ -15,6 +15,7 @@ export function TabBar() {
           <li key={tab.to} className="flex-1">
             <NavLink
               to={tab.to}
+              data-tour={tab.tour}
               className={({ isActive }) =>
                 cn(
                   'flex flex-col items-center gap-1 rounded-2xl px-1 py-1.5 text-[11px] font-semibold transition-colors duration-200',

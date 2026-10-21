@@ -76,7 +76,7 @@ Font dimuat di `src/main.tsx` via `@fontsource-variable/plus-jakarta-sans` dan
 | `Field` | Label + input + pesan error | — |
 | `SearchInput` | Input pencarian dengan ikon | — |
 | `EmptyState` | Tampilan saat data kosong | — |
-| `Skeleton` | Placeholder loading | — |
+| `Skeleton` | Placeholder loading (belum dipakai; rute memakai `fallback={null}`) | — |
 | `Progress` | Bar progres | — |
 | `Avatar` | Bulat dari inisial | — |
 | `Icon` | Pembungkus ikon Phosphor | `name`, `size`, `weight` |
@@ -149,8 +149,8 @@ setting + `useReducedMotion()` untuk animasi berbasis JS (mis. `CountUp`).
 
 ### Keyframes CSS
 
-Tetap dipakai untuk kasus non-JS: `.animate-rise`, `.animate-bloom`,
-`.animate-soft-pulse`, dan `.shimmer` (skeleton). Transisi komponen memakai
+Tetap dipakai untuk kasus non-JS: `.animate-rise`, `.animate-bloom`, dan
+`.animate-soft-pulse`. Transisi komponen memakai
 `cubic-bezier(0.16, 1, 0.3, 1)` (halus, "settling"). Semua otomatis
 dinonaktifkan mengikuti kebijakan gerak di atas.
 
@@ -171,3 +171,56 @@ dinonaktifkan mengikuti kebijakan gerak di atas.
 - `IconButton` mewajibkan `label` untuk `aria-label`/`title`.
 - Kontras teks memakai token `--fg`, `--fg-muted`, `--fg-subtle` yang sudah
   dikalibrasi untuk light & dark.
+- Tur guide: dialog memakai `role="dialog"`, `aria-modal="true"`, focus
+  dipindah ke kartu tiap langkah, focus di trap di dalam kartu, `Escape`
+  menutup tur.
+
+## 9. Tur Guide (Panduan)
+
+Tur adalah lapisan onboarding yang berjalan sekali per role lalu bisa diulang
+manual. Isi tur (copy, urutan langkah, rute tujuan) berada di
+`src/config/tour.ts`; orkestrasi di `src/components/tour/`.
+
+| Berkas | Tanggung jawab |
+| --- | --- |
+| `config/tour.ts` | `STUDENT_*` / `TEACHER_*` + `TOUR_COPY` (intro, langkah, outro) |
+| `lib/tour.ts` | Status "sudah dilihat" per role di `localStorage` (`ruang-tumbuh:tour:v1`) |
+| `components/tour/TourProvider.tsx` | Auto-start setelah login, transisi fase, navigasi rute per langkah |
+| `components/tour/Spotlight.tsx` | Cakram spotlight + scrim + halo "napas" |
+| `components/tour/TourCard.tsx` | Kartu intro/langkah/outro, penempatan, focus trap, keyboard |
+| `components/tour/useTargetRect.ts` | Melacak posisi elemen ber-`data-tour` |
+
+### Pola visual
+
+- **Tunas Cahaya**: elemen yang sedang dijelaskan disorot memakai
+  `box-shadow` berlapis — cincin aksen 2px + scrim `var(--tour-scrim)` sepanjang
+  `100vmax`. Halo `--inset-3` memakai keyframe `tour-breathe`.
+- **Progress batang tumbuh**: progres langkah digambar sebagai batang accent
+  dengan ujung ikon `leaf`; makin panjang = makin dekat selesai.
+- Kartu memakai token yang sama seperti komponen lain: `bg-surface`,
+  `border-border`, `rounded-[var(--radius-card)]`, `shadow-[var(--shadow-lg)]`.
+  Tidak ada warna hex di dalam JSX.
+
+### Menandai target
+
+Elemen yang ingin disorot diberi atribut `data-tour="<id>"`; id yang sama
+boleh dipakai di beberapa tempat (mis. nav versi mobile dan desktop).
+Pencarian memilih elemen yang terlihat (lebar & tinggi > 4px) paling dekat
+ke tengah viewport. Langkah boleh punya `route`; provider menavigasi ke rute
+tersebut lalu menunggu target muncul.
+
+Daftar id aktif: `student-beranda`, `student-mulai`, `student-jurnal`,
+`student-konsultasi`, `student-tumbuh`, `student-resume`, `student-pkl`,
+`student-profil`, `teacher-dasbor`, `teacher-antrean`, `teacher-alert-kartu`,
+`teacher-review`, `teacher-alert`, `teacher-murid`, `teacher-pkl`,
+`teacher-aktivitas`.
+
+### Aturan main
+
+- Z-index: spotlight & catcher `z-[60]`, kartu `z-[61]` (portal ke `body`).
+- Keyboard: `→`/`Enter` lanjut, `←` kembali, `Esc` keluar, `Tab` terjebak di
+  kartu. Tombol pintasan global (`n`, `/`, `⌘K`) tidak aktif selama tur
+  terbuka karena handler tur memakai fase capture.
+- Tur berhenti otomatis bila pengguna keluar dari akun.
+- Ulangi manual: Pengaturan → Panduan (murid) dan ikon kompas di sidebar/header
+  (guru). `Atur ulang data demo` juga menghapus status tur.

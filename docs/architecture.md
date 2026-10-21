@@ -40,8 +40,9 @@ src/
 ├── config/             # Data konfigurasi statis
 │   ├── dimensions.ts   #   6 dimensi PPP + 6 dimensi Kesiapan Kerja
 │   ├── majors.ts       #   Konfigurasi jurusan + daftar kelas
-│   ├── badges.ts       #   Definisi lencana
-│   └── teacherRoles.ts #   Label/meta role guru + label & target risiko
+    │   ├── badges.ts       #   Definisi lencana
+    │   ├── tour.ts         #   Copy tur guide per role
+    │   └── teacherRoles.ts #   Label/meta role guru + label & target risiko
 ├── data/               # Data seed (mock) yang dimuat ke state
 │   ├── students.ts     #   12 murid (4 per jurusan)
 │   ├── teachers.ts     #   5 akun guru
@@ -53,8 +54,9 @@ src/
 │   ├── risk.ts         #   Deteksi & eskalasi risiko
 │   ├── ai.ts           #   Generator balasan AI (rule-based)
 │   ├── teacher.ts      #   Selector khusus guru (roster, review, alert, stats)
-│   ├── storage.ts      #   Persistensi localStorage
-│   ├── format.ts       #   Format tanggal, mood, greeting, clamp
+    │   ├── storage.ts      #   Persistensi localStorage
+    │   ├── tour.ts         #   Status tur guide per role (localStorage)
+    │   ├── format.ts       #   Format tanggal, mood, greeting, clamp
 │   ├── theme.ts        #   Light/dark/system
 │   └── cn.ts           #   Penggabung className (clsx)
 ├── store/              # State global
@@ -76,8 +78,9 @@ src/
     ├── chat/           #   Composer, MessageBubble, RiskNotice
     ├── journal/        #   JournalCard, MoodPicker, DimensionTagPicker
     ├── progress/       #   BadgeGrid, TargetSection
-    ├── resume/         #   WeekTimeline, WeekDetailBody
-    └── teacher/        #   TeacherSidebar, StatTile, StudentRow, RiskAlertCard, …
+    ├── resume/           #   WeekTimeline, WeekDetailBody
+    ├── teacher/          #   TeacherSidebar, StatTile, StudentRow, RiskAlertCard, …
+    └── tour/             #   TourProvider, Spotlight, TourCard, useTargetRect
 ```
 
 Prinsip pemisahan:

@@ -1,7 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { TeacherShell } from '../components/layout/TeacherShell'
-import { ScreenSkeleton } from '../components/layout/ScreenSkeleton'
 
 const TeacherDashboard = lazy(() =>
   import('../screens/teacher/Dashboard/TeacherDashboard').then((m) => ({
@@ -31,7 +30,7 @@ const PklMonitoringScreen = lazy(() =>
 
 export function TeacherRoutes() {
   return (
-    <Suspense fallback={<ScreenSkeleton variant="teacher" />}>
+    <Suspense fallback={null}>
       <Routes>
         <Route element={<TeacherShell />}>
           <Route path="/guru" element={<TeacherDashboard />} />

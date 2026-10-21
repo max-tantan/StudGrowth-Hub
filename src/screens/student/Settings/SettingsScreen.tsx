@@ -18,6 +18,7 @@ import type { IconName } from '../../../components/ui/icons'
 import { SegmentedControl } from '../../../components/ui/SegmentedControl'
 import { Sheet } from '../../../components/ui/Sheet'
 import { Switch } from '../../../components/ui/Switch'
+import { useTour } from '../../../components/tour/TourContext'
 
 const TEXT_SCALE_OPTIONS: { value: TextScale; label: string }[] = [
   { value: 'normal', label: 'Normal' },
@@ -35,6 +36,7 @@ export function SettingsScreen() {
   const navigate = useNavigate()
   const { resetDemo } = useApp()
   const { settings, update } = useSettings()
+  const { start } = useTour()
   const [theme, setTheme] = useState<ThemePreference>(getThemePreference)
   const [resetOpen, setResetOpen] = useState(false)
 
@@ -129,6 +131,24 @@ export function SettingsScreen() {
               label="Peringatan risiko & konsultasi"
               description="Info saat murid terindikasi butuh perhatian guru BK."
             />
+          </Card>
+        </section>
+
+        <section>
+          <SectionTitle icon="compass">Panduan</SectionTitle>
+          <Card className="flex flex-col gap-3">
+            <SettingItem
+              label="Tur Ruang Tumbuh"
+              description="Tampilkan lagi penjelasan setiap fitur, lengkap dengan penanda di layar yang sedang dibahas."
+            >
+              <Button
+                variant="secondary"
+                icon="compass"
+                onClick={start}
+              >
+                Tonton ulang panduan
+              </Button>
+            </SettingItem>
           </Card>
         </section>
 

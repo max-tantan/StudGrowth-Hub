@@ -23,7 +23,8 @@ karakter dan kesiapan kerja untuk murid SMK, lengkap dengan modul guru.
 2. **Mengerjakan fitur data/skor/risiko?** Baca [`data-model.md`](data-model.md)
    dan [`scoring-and-risk.md`](scoring-and-risk.md).
 3. **Mengerjakan UI?** Baca [`design-system.md`](design-system.md) dan
-   [`conventions.md`](conventions.md).
+   [`conventions.md`](conventions.md). Aturan tur guide (panduan) ada di
+   bagian 9 `design-system.md`.
 4. **Menambah role atau halaman?** Baca [`roles-and-routing.md`](roles-and-routing.md).
 5. **Mau mencoba/mengetes aplikasi?** Lihat rute dan akun demo di
    [`endpoints-and-accounts.md`](endpoints-and-accounts.md).

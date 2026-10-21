@@ -69,7 +69,7 @@ export function PklScreen() {
       />
 
       <main className="flex flex-1 flex-col gap-5 px-4 pb-10 pt-4 lg:mx-auto lg:w-full lg:max-w-[880px] lg:px-8 lg:pb-14 lg:pt-6">
-        <Card className="overflow-hidden p-0">
+        <Card className="overflow-hidden p-0" data-tour="student-pkl">
           <div className="flex items-start gap-3 p-4">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-tint text-accent-strong">
               <Icon name="briefcase" size={24} weight="fill" />

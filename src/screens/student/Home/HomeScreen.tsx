@@ -224,7 +224,7 @@ export function HomeScreen() {
               </p>
               <div className="mt-3.5 flex gap-2">
                 <Link to="/jurnal/baru" state={{ prompt }} className="flex-1">
-                  <Button block size="sm" icon="note">
+                  <Button block size="sm" icon="note" data-tour="student-mulai">
                     Tulis jurnal
                   </Button>
                 </Link>

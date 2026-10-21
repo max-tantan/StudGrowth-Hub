@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import type { ChatMessage } from '../types'
 import { generateAiReply } from '../lib/ai'
 import { clearState, loadState, saveState } from '../lib/storage'
+import { resetTourSeen } from '../lib/tour'
 import { AppContext } from './AppContext'
 import type { AppContextValue } from './AppContext'
 import {
@@ -108,6 +109,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       },
       resetDemo: () => {
         clearState()
+        resetTourSeen()
         dispatch({ type: 'RESET' })
       },
     }

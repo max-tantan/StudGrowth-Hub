@@ -8,6 +8,7 @@ import { Chip } from '../ui/Chip'
 import { useApp } from '../../store/AppContext'
 import { TEACHER_ROLE_META } from '../../config/teacherRoles'
 import { isDarkNow, setThemePreference } from '../../lib/theme'
+import { useTour } from '../tour/TourContext'
 import { TEACHER_NAV } from './teacherNav'
 
 interface TeacherSidebarProps {
@@ -17,6 +18,7 @@ interface TeacherSidebarProps {
 
 export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSidebarProps) {
   const { currentTeacher, logout } = useApp()
+  const { start } = useTour()
   const [dark, setDark] = useState(isDarkNow)
   const role = TEACHER_ROLE_META[currentTeacher.role]
 
@@ -63,6 +65,7 @@ export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSideb
               key={item.to}
               to={item.to}
               end={item.end}
+              data-tour={item.tour}
               className={({ isActive }) =>
                 cn(
                   'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors duration-200',
@@ -103,6 +106,12 @@ export function TeacherSidebar({ reviewCount = 0, alertCount = 0 }: TeacherSideb
           </p>
         </div>
         <div className="flex items-center gap-1">
+          <IconButton
+            name="compass"
+            label="Buka panduan"
+            tone="ghost"
+            onClick={start}
+          />
           <IconButton
             name={dark ? 'sun' : 'moon'}
             label="Alihkan tema"

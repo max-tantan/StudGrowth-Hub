@@ -7,16 +7,24 @@ export interface TeacherNavItem {
   icon: IconName
   end?: boolean
   badgeKey?: 'review' | 'alert'
+  tour?: string
 }
 
 export const TEACHER_NAV: TeacherNavItem[] = [
-  { to: '/guru', label: 'Dasbor', icon: 'trend', end: true },
+  {
+    to: '/guru',
+    label: 'Dasbor',
+    icon: 'trend',
+    end: true,
+    tour: 'teacher-dasbor',
+  },
   {
     to: '/guru/review',
     label: 'Review Resume',
     shortLabel: 'Review',
     icon: 'resume',
     badgeKey: 'review',
+    tour: 'teacher-review',
   },
   {
     to: '/guru/alert',
@@ -24,12 +32,19 @@ export const TEACHER_NAV: TeacherNavItem[] = [
     shortLabel: 'Alert',
     icon: 'shieldWarning',
     badgeKey: 'alert',
+    tour: 'teacher-alert',
   },
-  { to: '/guru/murid', label: 'Murid', icon: 'users3' },
+  {
+    to: '/guru/murid',
+    label: 'Murid',
+    icon: 'users3',
+    tour: 'teacher-murid',
+  },
   {
     to: '/guru/pkl',
     label: 'Monitoring PKL',
     shortLabel: 'PKL',
     icon: 'briefcase',
+    tour: 'teacher-pkl',
   },
 ]

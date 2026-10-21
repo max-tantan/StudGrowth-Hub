@@ -39,6 +39,7 @@ import {
   Heart,
   House,
   Info,
+  Leaf,
   Lightbulb,
   Lightning,
   LinkSimple,
@@ -56,6 +57,7 @@ import {
   Palette,
   PaperPlaneRight,
   PencilSimple,
+  Plant,
   Plus,
   Quotes,
   Robot,
@@ -171,6 +173,8 @@ export const ICONS = {
   envelope: EnvelopeSimple,
   shieldCheck: ShieldCheck,
   arrowUpRight: ArrowUpRight,
+  leaf: Leaf,
+  plant: Plant,
 } as const
 
 export type IconName = keyof typeof ICONS

@@ -99,6 +99,7 @@ export function TeacherDashboard() {
         <Card
           padded={false}
           className="col-span-2 overflow-hidden lg:col-span-8 lg:row-start-2"
+          data-tour="teacher-antrean"
         >
           <PanelHead
             icon="clipboard"
@@ -151,6 +152,7 @@ export function TeacherDashboard() {
         <Card
           padded={false}
           className="col-span-2 overflow-hidden lg:col-span-4 lg:row-start-2"
+          data-tour="teacher-alert-kartu"
         >
           <PanelHead
             icon="shieldWarning"
@@ -233,7 +235,8 @@ export function TeacherDashboard() {
         {/* Recent activity */}
         <Card
           padded={false}
-          className="col-span-2 overflow-hidden lg:col-span-7 lg:row-start-3"
+          className="col-span-2 lg:col-span-7 lg:row-start-3"
+          data-tour="teacher-aktivitas"
         >
           <PanelHead icon="journal" title="Aktivitas terbaru" subtitle="Jurnal murid" />
           {recentJournals.length === 0 ? (

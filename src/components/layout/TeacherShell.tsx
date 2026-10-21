@@ -5,9 +5,11 @@ import { useApp } from '../../store/AppContext'
 import { rosterForTeacher, teacherStats } from '../../lib/teacher'
 import { TeacherSidebar } from '../teacher/TeacherSidebar'
 import { TeacherTabBar } from './TeacherTabBar'
+import { useTour } from '../tour/TourContext'
 
 export function TeacherShell() {
   const { state, currentTeacher, logout } = useApp()
+  const { start } = useTour()
   const students = rosterForTeacher(state, currentTeacher)
   const stats = teacherStats(state, students)
 
@@ -24,6 +26,12 @@ export function TeacherShell() {
               </span>
               <p className="truncate text-sm font-extrabold text-fg">Ruang Guru</p>
             </div>
+            <IconButton
+              name="compass"
+              label="Buka panduan"
+              tone="ghost"
+              onClick={start}
+            />
             {stats.activeAlerts > 0 && (
               <NavLink to="/guru/alert" className="relative">
                 <IconButton name="bell" label="Alert risiko" tone="ghost" />
